@@ -1,0 +1,62 @@
+
+=== row_by_row ===
+  低ノイズ n= 1 (h=12, w=30) ... 97.8167% (SD 0.2541, 0.0148 planning ms/trial, 0.0001 ms/op, max_plan=0.0070, opSD=0.0001 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  低ノイズ n= 2 (h=24, w=60) ... 95.4945% (SD 0.2418, 0.0312 planning ms/trial, 0.0003 ms/op, max_plan=0.0041, opSD=0.0001 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  低ノイズ n= 3 (h=36, w=90) ... 93.3362% (SD 0.2461, 0.0546 planning ms/trial, 0.0005 ms/op, max_plan=0.0063, opSD=0.0002 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  低ノイズ n= 4 (h=48, w=120) ... 91.4318% (SD 0.2352, 0.0876 planning ms/trial, 0.0009 ms/op, max_plan=0.0965, opSD=0.0010 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  低ノイズ n= 5 (h=60, w=150) ... 89.6905% (SD 0.1784, 0.1256 planning ms/trial, 0.0013 ms/op, max_plan=0.0102, opSD=0.0006 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  低ノイズ n= 6 (h=72, w=180) ... 88.2962% (SD 0.2000, 0.1608 planning ms/trial, 0.0016 ms/op, max_plan=0.0092, opSD=0.0008 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  低ノイズ n= 7 (h=84, w=210) ... 87.0942% (SD 0.1829, 0.1994 planning ms/trial, 0.0020 ms/op, max_plan=0.0191, opSD=0.0010 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  低ノイズ n= 8 (h=96, w=240) ... 86.0807% (SD 0.1544, 0.2331 planning ms/trial, 0.0023 ms/op, max_plan=0.0139, opSD=0.0012 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  低ノイズ n= 9 (h=108, w=270) ... 85.2508% (SD 0.1553, 0.2674 planning ms/trial, 0.0027 ms/op, max_plan=0.0116, opSD=0.0014 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  低ノイズ n=10 (h=120, w=300) ... 84.6371% (SD 0.1430, 0.3001 planning ms/trial, 0.0030 ms/op, max_plan=0.0113, opSD=0.0015 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  低ノイズ n=11 (h=132, w=330) ... 84.1037% (SD 0.1274, 0.3247 planning ms/trial, 0.0032 ms/op, max_plan=0.0365, opSD=0.0017 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  低ノイズ n=12 (h=144, w=360) ... 83.6588% (SD 0.1354, 0.3564 planning ms/trial, 0.0036 ms/op, max_plan=0.0114, opSD=0.0018 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  低ノイズ n=13 (h=156, w=390) ... 83.2661% (SD 0.1297, 0.3878 planning ms/trial, 0.0039 ms/op, max_plan=0.0229, opSD=0.0020 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  低ノイズ n=14 (h=168, w=420) ... 82.9460% (SD 0.1275, 0.4533 planning ms/trial, 0.0045 ms/op, max_plan=0.0166, opSD=0.0023 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  低ノイズ n=15 (h=180, w=450) ... 82.6628% (SD 0.1056, 0.4606 planning ms/trial, 0.0046 ms/op, max_plan=0.0178, opSD=0.0024 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n= 1 (h=12, w=30) ... 89.3030% (SD 0.4846, 0.0335 planning ms/trial, 0.0003 ms/op, max_plan=0.0251, opSD=0.0003 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n= 2 (h=24, w=60) ... 79.3278% (SD 0.4715, 0.0894 planning ms/trial, 0.0009 ms/op, max_plan=0.0089, opSD=0.0003 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n= 3 (h=36, w=90) ... 69.6844% (SD 0.5776, 0.1638 planning ms/trial, 0.0016 ms/op, max_plan=0.0144, opSD=0.0005 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n= 4 (h=48, w=120) ... 60.9385% (SD 0.5145, 0.2263 planning ms/trial, 0.0023 ms/op, max_plan=0.0366, opSD=0.0007 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n= 5 (h=60, w=150) ... 55.2243% (SD 0.3918, 0.2724 planning ms/trial, 0.0027 ms/op, max_plan=0.0108, opSD=0.0007 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n= 6 (h=72, w=180) ... 51.5406% (SD 0.3326, 0.3218 planning ms/trial, 0.0032 ms/op, max_plan=0.0163, opSD=0.0009 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n= 7 (h=84, w=210) ... 48.8573% (SD 0.3027, 0.4336 planning ms/trial, 0.0043 ms/op, max_plan=0.2409, opSD=0.0027 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n= 8 (h=96, w=240) ... 46.8668% (SD 0.2399, 0.4985 planning ms/trial, 0.0050 ms/op, max_plan=0.0199, opSD=0.0014 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n= 9 (h=108, w=270) ... 45.2771% (SD 0.1818, 0.5932 planning ms/trial, 0.0059 ms/op, max_plan=0.0239, opSD=0.0017 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n=10 (h=120, w=300) ... 44.0290% (SD 0.1674, 0.6138 planning ms/trial, 0.0061 ms/op, max_plan=0.0186, opSD=0.0017 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n=11 (h=132, w=330) ... 42.9910% (SD 0.1985, 0.6770 planning ms/trial, 0.0068 ms/op, max_plan=0.0228, opSD=0.0019 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n=12 (h=144, w=360) ... 42.1236% (SD 0.1539, 0.6990 planning ms/trial, 0.0070 ms/op, max_plan=0.0197, opSD=0.0019 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n=13 (h=156, w=390) ... 41.4425% (SD 0.1552, 0.7964 planning ms/trial, 0.0080 ms/op, max_plan=0.0654, opSD=0.0023 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n=14 (h=168, w=420) ... 40.8458% (SD 0.1365, 0.8261 planning ms/trial, 0.0083 ms/op, max_plan=0.0272, opSD=0.0022 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json
+  高ノイズ n=15 (h=180, w=450) ... 40.2672% (SD 0.1411, 0.8888 planning ms/trial, 0.0089 ms/op, max_plan=0.0242, opSD=0.0024 ms)
+Saved: results/additional_row_by_row_20260927/results_row_by_row.json

@@ -1,0 +1,22 @@
+[project]
+name = "atom-reloading-analysis"
+version = "0.1.0"
+description = "Generate figures and statistics for the paper from atom reloading experiments"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "matplotlib>=3.6,<4",
+    "scipy>=1.10,<2",
+]
+
+[project.scripts]
+plot-metrics = "atom_reloading_analysis.plot_metrics:main"
+plot-filling-rate = "atom_reloading_analysis.plot_filling_rate:main"
+trial-stats = "atom_reloading_analysis.trial_stats:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/atom_reloading_analysis"]

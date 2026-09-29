@@ -1,0 +1,42 @@
+{
+  "experiment_id": "additional_row_by_row_20260927",
+  "role": "additional experiment; table only",
+  "simulation_commit": "d68bb658dcbc139ee9e8ab3d3d4dda34e06e852a",
+  "command": "./atom_reloading -a row_by_row -n 15 -o results/additional_row_by_row_20260927/results_row_by_row.json",
+  "cpu": "Intel Core i5-12400F",
+  "logical_cpus": 4,
+  "guest_ram_gib": 8,
+  "memtotal_kib": 8033480,
+  "os": "Ubuntu 24.04.3 LTS",
+  "kernel": "6.8.0-139-generic",
+  "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "cxxflags": "-std=c++17 -Wall -Wextra -O2 -I./include -Iobj",
+  "policy": {
+    "row": "(t-1) mod h, t starts at 1",
+    "columns": "up to m_c defects, ascending column index",
+    "full_row": "no reload, still consumes one step",
+    "capacity": "m_r=4n, m_c=15n (one row is used)",
+    "noise": "same site noise and trial seeds as main experiment",
+    "horizon": "T=100, average steps 21..100; not assumed stationary"
+  },
+  "plot_policy": "Existing figures and plotting scripts unchanged; additional results stored in a dedicated directory.",
+  "sources": {
+    "src/solution/row_by_row.cpp": "f6a8a84c6771c0a91e3075342af8c3056ed7dd6889ff960d6a2d02597cbc73d2",
+    "src/main.cpp": "1819461c7db0bf5d1ef7de81b208c9941cf321452f2689358e1875a97dbd8307",
+    "src/simulator.cpp": "05e511c1aa0d4103b585f62078ca92413cc3f69c1a4ed6d1b9388977f7d82a67",
+    "src/noise.cpp": "3c30c3f69aec210b5863fa93620094daaaff260d1295a2db44d6f328b9d462f4",
+    "include/experiment_defaults.h": "53c8081b42e6cae4d1eef2fd2f8d8edafbcb3d4ce199fd91b73961ff13c83528"
+  },
+  "comparison_files": {
+    "results_baseline.json": {
+      "sha256": "aa9c6110a2b061c759859aad75115ce00a913f6fba3fb57e6aec045106aaeca3",
+      "commit_id": "24b3caf9359dab6388f10a5580c2fc34ffeb8956",
+      "rerun": false
+    },
+    "results_proposed.json": {
+      "sha256": "0651f85dbe86a72270f31f9033bef64eb933f1dc321796264417402c509659fe",
+      "commit_id": "24b3caf9359dab6388f10a5580c2fc34ffeb8956",
+      "rerun": false
+    }
+  }
+}

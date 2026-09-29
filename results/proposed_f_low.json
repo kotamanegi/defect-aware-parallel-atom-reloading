@@ -1,0 +1,533 @@
+{
+  "parameters": {
+    "n": 15,
+    "h": 180,
+    "w": 450,
+    "m_r": 60,
+    "m_c": 225,
+    "p_idle": 0.004000,
+    "p_reload": 0.004000,
+    "num_iterations": 100,
+    "num_trials": 100,
+    "seed_base": 998244353
+  },
+  "algorithm": {
+    "id": 1,
+    "name": "proposed"
+  },
+  "average_filling_rate": 0.994663,
+  "commit_id": "24b3caf9359dab6388f10a5580c2fc34ffeb8956",
+  "schema_version": 4,
+  "burn_in_operations": 20,
+  "first_averaged_operation": 21,
+  "time_index_base": 1,
+  "baseline_index_policy": "paper_one_based_sites",
+  "rng_policy": "site_noise_v1_mt19937_seed_seq_uniform53",
+  "seed_policy": "version,seed_base,h,w,m_r,m_c,p_idle_bits,p_reload_bits,trial_index,stream",
+  "timing_clock": "steady_clock_wall",
+  "planning_time_scope": "plan call only",
+  "runtime_time_scope": "sum of plan calls per trial including burn-in",
+  "trial_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99],
+  "iterations": [
+    {
+      "iteration": 1,
+      "filling_rate": 0.997961,
+      "filling_rate_std": 0.000167
+    },
+    {
+      "iteration": 2,
+      "filling_rate": 0.996600,
+      "filling_rate_std": 0.000214
+    },
+    {
+      "iteration": 3,
+      "filling_rate": 0.995741,
+      "filling_rate_std": 0.000214
+    },
+    {
+      "iteration": 4,
+      "filling_rate": 0.995212,
+      "filling_rate_std": 0.000202
+    },
+    {
+      "iteration": 5,
+      "filling_rate": 0.994920,
+      "filling_rate_std": 0.000269
+    },
+    {
+      "iteration": 6,
+      "filling_rate": 0.994804,
+      "filling_rate_std": 0.000286
+    },
+    {
+      "iteration": 7,
+      "filling_rate": 0.994732,
+      "filling_rate_std": 0.000269
+    },
+    {
+      "iteration": 8,
+      "filling_rate": 0.994714,
+      "filling_rate_std": 0.000252
+    },
+    {
+      "iteration": 9,
+      "filling_rate": 0.994692,
+      "filling_rate_std": 0.000266
+    },
+    {
+      "iteration": 10,
+      "filling_rate": 0.994673,
+      "filling_rate_std": 0.000243
+    },
+    {
+      "iteration": 11,
+      "filling_rate": 0.994643,
+      "filling_rate_std": 0.000248
+    },
+    {
+      "iteration": 12,
+      "filling_rate": 0.994657,
+      "filling_rate_std": 0.000257
+    },
+    {
+      "iteration": 13,
+      "filling_rate": 0.994634,
+      "filling_rate_std": 0.000245
+    },
+    {
+      "iteration": 14,
+      "filling_rate": 0.994633,
+      "filling_rate_std": 0.000266
+    },
+    {
+      "iteration": 15,
+      "filling_rate": 0.994638,
+      "filling_rate_std": 0.000305
+    },
+    {
+      "iteration": 16,
+      "filling_rate": 0.994644,
+      "filling_rate_std": 0.000250
+    },
+    {
+      "iteration": 17,
+      "filling_rate": 0.994665,
+      "filling_rate_std": 0.000262
+    },
+    {
+      "iteration": 18,
+      "filling_rate": 0.994654,
+      "filling_rate_std": 0.000269
+    },
+    {
+      "iteration": 19,
+      "filling_rate": 0.994673,
+      "filling_rate_std": 0.000246
+    },
+    {
+      "iteration": 20,
+      "filling_rate": 0.994652,
+      "filling_rate_std": 0.000257
+    },
+    {
+      "iteration": 21,
+      "filling_rate": 0.994630,
+      "filling_rate_std": 0.000267
+    },
+    {
+      "iteration": 22,
+      "filling_rate": 0.994662,
+      "filling_rate_std": 0.000300
+    },
+    {
+      "iteration": 23,
+      "filling_rate": 0.994639,
+      "filling_rate_std": 0.000284
+    },
+    {
+      "iteration": 24,
+      "filling_rate": 0.994700,
+      "filling_rate_std": 0.000265
+    },
+    {
+      "iteration": 25,
+      "filling_rate": 0.994702,
+      "filling_rate_std": 0.000264
+    },
+    {
+      "iteration": 26,
+      "filling_rate": 0.994664,
+      "filling_rate_std": 0.000249
+    },
+    {
+      "iteration": 27,
+      "filling_rate": 0.994645,
+      "filling_rate_std": 0.000260
+    },
+    {
+      "iteration": 28,
+      "filling_rate": 0.994665,
+      "filling_rate_std": 0.000257
+    },
+    {
+      "iteration": 29,
+      "filling_rate": 0.994688,
+      "filling_rate_std": 0.000248
+    },
+    {
+      "iteration": 30,
+      "filling_rate": 0.994720,
+      "filling_rate_std": 0.000285
+    },
+    {
+      "iteration": 31,
+      "filling_rate": 0.994691,
+      "filling_rate_std": 0.000284
+    },
+    {
+      "iteration": 32,
+      "filling_rate": 0.994696,
+      "filling_rate_std": 0.000266
+    },
+    {
+      "iteration": 33,
+      "filling_rate": 0.994677,
+      "filling_rate_std": 0.000246
+    },
+    {
+      "iteration": 34,
+      "filling_rate": 0.994654,
+      "filling_rate_std": 0.000261
+    },
+    {
+      "iteration": 35,
+      "filling_rate": 0.994632,
+      "filling_rate_std": 0.000262
+    },
+    {
+      "iteration": 36,
+      "filling_rate": 0.994607,
+      "filling_rate_std": 0.000255
+    },
+    {
+      "iteration": 37,
+      "filling_rate": 0.994617,
+      "filling_rate_std": 0.000230
+    },
+    {
+      "iteration": 38,
+      "filling_rate": 0.994616,
+      "filling_rate_std": 0.000220
+    },
+    {
+      "iteration": 39,
+      "filling_rate": 0.994642,
+      "filling_rate_std": 0.000282
+    },
+    {
+      "iteration": 40,
+      "filling_rate": 0.994661,
+      "filling_rate_std": 0.000263
+    },
+    {
+      "iteration": 41,
+      "filling_rate": 0.994658,
+      "filling_rate_std": 0.000310
+    },
+    {
+      "iteration": 42,
+      "filling_rate": 0.994666,
+      "filling_rate_std": 0.000301
+    },
+    {
+      "iteration": 43,
+      "filling_rate": 0.994679,
+      "filling_rate_std": 0.000288
+    },
+    {
+      "iteration": 44,
+      "filling_rate": 0.994678,
+      "filling_rate_std": 0.000257
+    },
+    {
+      "iteration": 45,
+      "filling_rate": 0.994664,
+      "filling_rate_std": 0.000277
+    },
+    {
+      "iteration": 46,
+      "filling_rate": 0.994676,
+      "filling_rate_std": 0.000278
+    },
+    {
+      "iteration": 47,
+      "filling_rate": 0.994644,
+      "filling_rate_std": 0.000265
+    },
+    {
+      "iteration": 48,
+      "filling_rate": 0.994633,
+      "filling_rate_std": 0.000286
+    },
+    {
+      "iteration": 49,
+      "filling_rate": 0.994653,
+      "filling_rate_std": 0.000294
+    },
+    {
+      "iteration": 50,
+      "filling_rate": 0.994699,
+      "filling_rate_std": 0.000307
+    },
+    {
+      "iteration": 51,
+      "filling_rate": 0.994693,
+      "filling_rate_std": 0.000292
+    },
+    {
+      "iteration": 52,
+      "filling_rate": 0.994682,
+      "filling_rate_std": 0.000277
+    },
+    {
+      "iteration": 53,
+      "filling_rate": 0.994670,
+      "filling_rate_std": 0.000260
+    },
+    {
+      "iteration": 54,
+      "filling_rate": 0.994637,
+      "filling_rate_std": 0.000259
+    },
+    {
+      "iteration": 55,
+      "filling_rate": 0.994675,
+      "filling_rate_std": 0.000273
+    },
+    {
+      "iteration": 56,
+      "filling_rate": 0.994695,
+      "filling_rate_std": 0.000274
+    },
+    {
+      "iteration": 57,
+      "filling_rate": 0.994689,
+      "filling_rate_std": 0.000270
+    },
+    {
+      "iteration": 58,
+      "filling_rate": 0.994638,
+      "filling_rate_std": 0.000265
+    },
+    {
+      "iteration": 59,
+      "filling_rate": 0.994628,
+      "filling_rate_std": 0.000253
+    },
+    {
+      "iteration": 60,
+      "filling_rate": 0.994660,
+      "filling_rate_std": 0.000298
+    },
+    {
+      "iteration": 61,
+      "filling_rate": 0.994683,
+      "filling_rate_std": 0.000265
+    },
+    {
+      "iteration": 62,
+      "filling_rate": 0.994695,
+      "filling_rate_std": 0.000270
+    },
+    {
+      "iteration": 63,
+      "filling_rate": 0.994694,
+      "filling_rate_std": 0.000241
+    },
+    {
+      "iteration": 64,
+      "filling_rate": 0.994660,
+      "filling_rate_std": 0.000259
+    },
+    {
+      "iteration": 65,
+      "filling_rate": 0.994652,
+      "filling_rate_std": 0.000252
+    },
+    {
+      "iteration": 66,
+      "filling_rate": 0.994662,
+      "filling_rate_std": 0.000276
+    },
+    {
+      "iteration": 67,
+      "filling_rate": 0.994664,
+      "filling_rate_std": 0.000266
+    },
+    {
+      "iteration": 68,
+      "filling_rate": 0.994677,
+      "filling_rate_std": 0.000263
+    },
+    {
+      "iteration": 69,
+      "filling_rate": 0.994694,
+      "filling_rate_std": 0.000252
+    },
+    {
+      "iteration": 70,
+      "filling_rate": 0.994659,
+      "filling_rate_std": 0.000256
+    },
+    {
+      "iteration": 71,
+      "filling_rate": 0.994651,
+      "filling_rate_std": 0.000306
+    },
+    {
+      "iteration": 72,
+      "filling_rate": 0.994630,
+      "filling_rate_std": 0.000331
+    },
+    {
+      "iteration": 73,
+      "filling_rate": 0.994634,
+      "filling_rate_std": 0.000281
+    },
+    {
+      "iteration": 74,
+      "filling_rate": 0.994661,
+      "filling_rate_std": 0.000267
+    },
+    {
+      "iteration": 75,
+      "filling_rate": 0.994658,
+      "filling_rate_std": 0.000260
+    },
+    {
+      "iteration": 76,
+      "filling_rate": 0.994656,
+      "filling_rate_std": 0.000281
+    },
+    {
+      "iteration": 77,
+      "filling_rate": 0.994680,
+      "filling_rate_std": 0.000274
+    },
+    {
+      "iteration": 78,
+      "filling_rate": 0.994658,
+      "filling_rate_std": 0.000256
+    },
+    {
+      "iteration": 79,
+      "filling_rate": 0.994630,
+      "filling_rate_std": 0.000298
+    },
+    {
+      "iteration": 80,
+      "filling_rate": 0.994656,
+      "filling_rate_std": 0.000302
+    },
+    {
+      "iteration": 81,
+      "filling_rate": 0.994661,
+      "filling_rate_std": 0.000279
+    },
+    {
+      "iteration": 82,
+      "filling_rate": 0.994691,
+      "filling_rate_std": 0.000260
+    },
+    {
+      "iteration": 83,
+      "filling_rate": 0.994651,
+      "filling_rate_std": 0.000284
+    },
+    {
+      "iteration": 84,
+      "filling_rate": 0.994648,
+      "filling_rate_std": 0.000276
+    },
+    {
+      "iteration": 85,
+      "filling_rate": 0.994660,
+      "filling_rate_std": 0.000279
+    },
+    {
+      "iteration": 86,
+      "filling_rate": 0.994676,
+      "filling_rate_std": 0.000259
+    },
+    {
+      "iteration": 87,
+      "filling_rate": 0.994721,
+      "filling_rate_std": 0.000268
+    },
+    {
+      "iteration": 88,
+      "filling_rate": 0.994696,
+      "filling_rate_std": 0.000259
+    },
+    {
+      "iteration": 89,
+      "filling_rate": 0.994666,
+      "filling_rate_std": 0.000253
+    },
+    {
+      "iteration": 90,
+      "filling_rate": 0.994647,
+      "filling_rate_std": 0.000277
+    },
+    {
+      "iteration": 91,
+      "filling_rate": 0.994641,
+      "filling_rate_std": 0.000263
+    },
+    {
+      "iteration": 92,
+      "filling_rate": 0.994645,
+      "filling_rate_std": 0.000250
+    },
+    {
+      "iteration": 93,
+      "filling_rate": 0.994678,
+      "filling_rate_std": 0.000249
+    },
+    {
+      "iteration": 94,
+      "filling_rate": 0.994687,
+      "filling_rate_std": 0.000249
+    },
+    {
+      "iteration": 95,
+      "filling_rate": 0.994689,
+      "filling_rate_std": 0.000289
+    },
+    {
+      "iteration": 96,
+      "filling_rate": 0.994666,
+      "filling_rate_std": 0.000293
+    },
+    {
+      "iteration": 97,
+      "filling_rate": 0.994659,
+      "filling_rate_std": 0.000259
+    },
+    {
+      "iteration": 98,
+      "filling_rate": 0.994636,
+      "filling_rate_std": 0.000251
+    },
+    {
+      "iteration": 99,
+      "filling_rate": 0.994623,
+      "filling_rate_std": 0.000276
+    },
+    {
+      "iteration": 100,
+      "filling_rate": 0.994641,
+      "filling_rate_std": 0.000282
+    }
+  ]
+}

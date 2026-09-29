@@ -1,0 +1,60 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Linker files
+*.ilk
+
+# Debugger Files
+*.pdb
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# debug information files
+*.dwo
+
+# Build artifacts
+obj/
+/atom_reloading
+/atom_reloading_simple
+/atom_reloading_glpk
+/atom_reloading_scip
+
+# Files generated at runtime
+execution_result.json
+__pycache__/
+
+# Python (analysis/) virtual environments and build artifacts. Track uv.lock.
+.venv/
+*.egg-info/
+.uv-cache/
+
+# Track results/ and figures/ because the paper references these artifacts.
+# Keep experiment scratch files out of these directories and the repository root.

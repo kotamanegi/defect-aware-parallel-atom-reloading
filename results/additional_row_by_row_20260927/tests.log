@@ -1,0 +1,13 @@
+コンパイル中: src/main.cpp
+g++ -std=c++17 -Wall -Wextra -O2 -I./include -Iobj -c src/main.cpp -o obj/main.o
+リンク中: atom_reloading
+g++ -std=c++17 -Wall -Wextra -O2 -I./include -Iobj -o atom_reloading obj/algorithm_registry.o obj/benchmark_runner.o obj/grid.o obj/noise.o obj/simulator.o obj/types.o obj/solution/baseline.o obj/solution/greedy.o obj/solution/mip_glpk.o obj/solution/mip_scip.o obj/solution/proposed.o obj/solution/row_by_row.o obj/solution/simple_greedy.o obj/main.o -lscip -lglpk
+ビルド完了: atom_reloading
+./obj/tests/algorithms_test
+Exhaustive 2x3 hill cases: 40960
+MIP exhaustive cases: 9216
+All algorithm tests passed
+./obj/tests/benchmark_runner_test
+Benchmark cumulative-budget tests passed.
+python3 tests/benchmark_cli_test.py
+Benchmark CLI / JSON tests passed.

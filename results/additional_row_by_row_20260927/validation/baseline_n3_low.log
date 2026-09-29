@@ -1,0 +1,25 @@
+原子再充填シミュレーション - 単純実行モード (trials=100)
+============================================
+格子サイズ (h): 36
+格子サイズ (w): 90
+充填領域サイズ (m_r×m_c): 12×45
+環境ノイズ (p_idle): 0.0040
+再充填ノイズ (p_reload): 0.0040
+イテレーション数: 100
+アルゴリズム: ベースライン
+Seed base: 998244353
+乱数方式: 試行番号ごとの固定シード（実行順・手法・n_max に依存しない）
+--------------------------------------------
+  trial 10/100 done (avg_fill=98.6543%)
+  trial 20/100 done (avg_fill=98.6377%)
+  trial 30/100 done (avg_fill=98.5463%)
+  trial 40/100 done (avg_fill=98.6177%)
+  trial 50/100 done (avg_fill=98.6890%)
+  trial 60/100 done (avg_fill=98.5590%)
+  trial 70/100 done (avg_fill=98.6173%)
+  trial 80/100 done (avg_fill=98.6964%)
+  trial 90/100 done (avg_fill=98.5617%)
+  trial 100/100 done (avg_fill=98.5602%)
+Average filling rate (mean over trials): 98.6149%
+
+実行結果を../validation/baseline_n3_low.jsonに保存しました。

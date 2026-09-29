@@ -1,0 +1,15 @@
+{
+  "experiment_id": "additional_row_by_row_20260927",
+  "result_sha256": "eff6d66bae727228c5d70969666bb3482abe408d105cb834650bd286c8e95e56",
+  "simulation_commit": "d68bb658dcbc139ee9e8ab3d3d4dda34e06e852a",
+  "completed_settings": 30,
+  "completed_trials": 3000,
+  "completed_operations": 300000,
+  "checks": [
+    "all settings complete",
+    "main-experiment seed and geometry",
+    "mean and sample SD from trial data",
+    "planning-time consistency",
+    "no occupied atoms reloaded"
+  ]
+}

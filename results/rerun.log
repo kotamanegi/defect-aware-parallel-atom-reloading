@@ -1,0 +1,356 @@
+nohup: ignoring input
+
+=== baseline ===
+  低ノイズ n= 1 (h=12, w=30) ... 98.6084% (SD 0.1423, 0.8947 ms/trial, 0.0089 ms/op, max_plan=0.0092, opSD=0.0003 ms)
+Saved: results/results_baseline.json
+  低ノイズ n= 2 (h=24, w=60) ... 98.6133% (SD 0.0833, 2.0164 ms/trial, 0.0202 ms/op, max_plan=0.0063, opSD=0.0002 ms)
+Saved: results/results_baseline.json
+  低ノイズ n= 3 (h=36, w=90) ... 98.6149% (SD 0.0569, 4.0854 ms/trial, 0.0409 ms/op, max_plan=0.0078, opSD=0.0002 ms)
+Saved: results/results_baseline.json
+  低ノイズ n= 4 (h=48, w=120) ... 98.6071% (SD 0.0399, 6.6707 ms/trial, 0.0667 ms/op, max_plan=0.0114, opSD=0.0003 ms)
+Saved: results/results_baseline.json
+  低ノイズ n= 5 (h=60, w=150) ... 98.6069% (SD 0.0286, 9.9905 ms/trial, 0.0999 ms/op, max_plan=0.0131, opSD=0.0003 ms)
+Saved: results/results_baseline.json
+  低ノイズ n= 6 (h=72, w=180) ... 98.6079% (SD 0.0266, 14.1551 ms/trial, 0.1416 ms/op, max_plan=0.0097, opSD=0.0003 ms)
+Saved: results/results_baseline.json
+  低ノイズ n= 7 (h=84, w=210) ... 98.6104% (SD 0.0210, 19.0993 ms/trial, 0.1910 ms/op, max_plan=0.0175, opSD=0.0004 ms)
+Saved: results/results_baseline.json
+  低ノイズ n= 8 (h=96, w=240) ... 98.6106% (SD 0.0166, 24.6290 ms/trial, 0.2463 ms/op, max_plan=0.0359, opSD=0.0005 ms)
+Saved: results/results_baseline.json
+  低ノイズ n= 9 (h=108, w=270) ... 98.6087% (SD 0.0144, 31.3561 ms/trial, 0.3136 ms/op, max_plan=0.0141, opSD=0.0004 ms)
+Saved: results/results_baseline.json
+  低ノイズ n=10 (h=120, w=300) ... 98.6096% (SD 0.0144, 38.3061 ms/trial, 0.3831 ms/op, max_plan=0.0221, opSD=0.0006 ms)
+Saved: results/results_baseline.json
+  低ノイズ n=11 (h=132, w=330) ... 98.6094% (SD 0.0132, 46.6275 ms/trial, 0.4663 ms/op, max_plan=0.0196, opSD=0.0005 ms)
+Saved: results/results_baseline.json
+  低ノイズ n=12 (h=144, w=360) ... 98.6104% (SD 0.0122, 54.3339 ms/trial, 0.5433 ms/op, max_plan=0.0262, opSD=0.0006 ms)
+Saved: results/results_baseline.json
+  低ノイズ n=13 (h=156, w=390) ... 98.6089% (SD 0.0103, 63.5604 ms/trial, 0.6356 ms/op, max_plan=0.0229, opSD=0.0006 ms)
+Saved: results/results_baseline.json
+  低ノイズ n=14 (h=168, w=420) ... 98.6108% (SD 0.0107, 74.6213 ms/trial, 0.7462 ms/op, max_plan=0.0209, opSD=0.0007 ms)
+Saved: results/results_baseline.json
+  低ノイズ n=15 (h=180, w=450) ... 98.6074% (SD 0.0086, 83.8339 ms/trial, 0.8383 ms/op, max_plan=0.0285, opSD=0.0008 ms)
+Saved: results/results_baseline.json
+  高ノイズ n= 1 (h=12, w=30) ... 93.2228% (SD 0.3078, 0.7901 ms/trial, 0.0079 ms/op, max_plan=0.0076, opSD=0.0001 ms)
+Saved: results/results_baseline.json
+  高ノイズ n= 2 (h=24, w=60) ... 93.2378% (SD 0.1510, 2.1368 ms/trial, 0.0214 ms/op, max_plan=0.0094, opSD=0.0002 ms)
+Saved: results/results_baseline.json
+  高ノイズ n= 3 (h=36, w=90) ... 93.2184% (SD 0.0992, 4.2957 ms/trial, 0.0430 ms/op, max_plan=0.0071, opSD=0.0002 ms)
+Saved: results/results_baseline.json
+  高ノイズ n= 4 (h=48, w=120) ... 93.2327% (SD 0.0802, 7.2988 ms/trial, 0.0730 ms/op, max_plan=0.0104, opSD=0.0004 ms)
+Saved: results/results_baseline.json
+  高ノイズ n= 5 (h=60, w=150) ... 93.2259% (SD 0.0592, 11.0248 ms/trial, 0.1102 ms/op, max_plan=0.0154, opSD=0.0005 ms)
+Saved: results/results_baseline.json
+  高ノイズ n= 6 (h=72, w=180) ... 93.2284% (SD 0.0477, 14.6802 ms/trial, 0.1468 ms/op, max_plan=0.0187, opSD=0.0006 ms)
+Saved: results/results_baseline.json
+  高ノイズ n= 7 (h=84, w=210) ... 93.2287% (SD 0.0472, 19.6102 ms/trial, 0.1961 ms/op, max_plan=0.0120, opSD=0.0006 ms)
+Saved: results/results_baseline.json
+  高ノイズ n= 8 (h=96, w=240) ... 93.2310% (SD 0.0409, 25.4473 ms/trial, 0.2545 ms/op, max_plan=0.0108, opSD=0.0004 ms)
+Saved: results/results_baseline.json
+  高ノイズ n= 9 (h=108, w=270) ... 93.2305% (SD 0.0308, 31.7166 ms/trial, 0.3172 ms/op, max_plan=0.0147, opSD=0.0004 ms)
+Saved: results/results_baseline.json
+  高ノイズ n=10 (h=120, w=300) ... 93.2323% (SD 0.0294, 39.2901 ms/trial, 0.3929 ms/op, max_plan=0.0194, opSD=0.0005 ms)
+Saved: results/results_baseline.json
+  高ノイズ n=11 (h=132, w=330) ... 93.2323% (SD 0.0272, 46.9552 ms/trial, 0.4696 ms/op, max_plan=0.0151, opSD=0.0005 ms)
+Saved: results/results_baseline.json
+  高ノイズ n=12 (h=144, w=360) ... 93.2292% (SD 0.0260, 56.3010 ms/trial, 0.5630 ms/op, max_plan=0.0626, opSD=0.0008 ms)
+Saved: results/results_baseline.json
+  高ノイズ n=13 (h=156, w=390) ... 93.2282% (SD 0.0252, 66.0924 ms/trial, 0.6609 ms/op, max_plan=0.0203, opSD=0.0006 ms)
+Saved: results/results_baseline.json
+  高ノイズ n=14 (h=168, w=420) ... 93.2298% (SD 0.0233, 76.7073 ms/trial, 0.7671 ms/op, max_plan=0.0200, opSD=0.0007 ms)
+Saved: results/results_baseline.json
+  高ノイズ n=15 (h=180, w=450) ... 93.2240% (SD 0.0210, 88.3684 ms/trial, 0.8837 ms/op, max_plan=0.0257, opSD=0.0009 ms)
+Saved: results/results_baseline.json
+
+=== proposed ===
+  低ノイズ n= 1 (h=12, w=30) ... 99.9942% (SD 0.0048, 0.9307 ms/trial, 0.0093 ms/op, max_plan=0.0083, opSD=0.0005 ms)  [HC収束: 1.0000 iters]
+Saved: results/results_proposed.json
+  低ノイズ n= 2 (h=24, w=60) ... 99.9828% (SD 0.0062, 2.6128 ms/trial, 0.0261 ms/op, max_plan=0.0118, opSD=0.0006 ms)  [HC収束: 1.0000 iters]
+Saved: results/results_proposed.json
+  低ノイズ n= 3 (h=36, w=90) ... 99.9430% (SD 0.0123, 5.0499 ms/trial, 0.0505 ms/op, max_plan=0.0185, opSD=0.0007 ms)  [HC収束: 1.0000 iters]
+Saved: results/results_proposed.json
+  低ノイズ n= 4 (h=48, w=120) ... 99.8306% (SD 0.0189, 8.4125 ms/trial, 0.0841 ms/op, max_plan=0.0357, opSD=0.0012 ms)  [HC収束: 1.0000 iters]
+Saved: results/results_proposed.json
+  低ノイズ n= 5 (h=60, w=150) ... 99.7587% (SD 0.0108, 12.6366 ms/trial, 0.1264 ms/op, max_plan=0.1037, opSD=0.0015 ms)  [HC収束: 1.0001 iters]
+Saved: results/results_proposed.json
+  低ノイズ n= 6 (h=72, w=180) ... 99.7209% (SD 0.0105, 17.6721 ms/trial, 0.1767 ms/op, max_plan=0.1163, opSD=0.0017 ms)  [HC収束: 1.0029 iters]
+Saved: results/results_proposed.json
+  低ノイズ n= 7 (h=84, w=210) ... 99.6725% (SD 0.0114, 23.9314 ms/trial, 0.2393 ms/op, max_plan=0.0662, opSD=0.0017 ms)  [HC収束: 1.0053 iters]
+Saved: results/results_proposed.json
+  低ノイズ n= 8 (h=96, w=240) ... 99.6353% (SD 0.0084, 30.4248 ms/trial, 0.3042 ms/op, max_plan=0.1005, opSD=0.0024 ms)  [HC収束: 1.0038 iters]
+Saved: results/results_proposed.json
+  低ノイズ n= 9 (h=108, w=270) ... 99.6043% (SD 0.0076, 38.7459 ms/trial, 0.3875 ms/op, max_plan=0.1173, opSD=0.0029 ms)  [HC収束: 1.0032 iters]
+Saved: results/results_proposed.json
+  低ノイズ n=10 (h=120, w=300) ... 99.5739% (SD 0.0058, 47.4653 ms/trial, 0.4747 ms/op, max_plan=0.1810, opSD=0.0065 ms)  [HC収束: 1.0322 iters]
+Saved: results/results_proposed.json
+  低ノイズ n=11 (h=132, w=330) ... 99.5454% (SD 0.0068, 56.7957 ms/trial, 0.5680 ms/op, max_plan=0.2038, opSD=0.0042 ms)  [HC収束: 1.2028 iters]
+Saved: results/results_proposed.json
+  低ノイズ n=12 (h=144, w=360) ... 99.5232% (SD 0.0062, 67.8007 ms/trial, 0.6780 ms/op, max_plan=0.6224, opSD=0.0080 ms)  [HC収束: 1.4590 iters]
+Saved: results/results_proposed.json
+  低ノイズ n=13 (h=156, w=390) ... 99.5036% (SD 0.0052, 77.8408 ms/trial, 0.7784 ms/op, max_plan=0.2022, opSD=0.0047 ms)  [HC収束: 1.5324 iters]
+Saved: results/results_proposed.json
+  低ノイズ n=14 (h=168, w=420) ... 99.4876% (SD 0.0059, 89.8068 ms/trial, 0.8981 ms/op, max_plan=0.2990, opSD=0.0055 ms)  [HC収束: 1.4941 iters]
+Saved: results/results_proposed.json
+  低ノイズ n=15 (h=180, w=450) ... 99.4663% (SD 0.0062, 103.1632 ms/trial, 1.0316 ms/op, max_plan=0.2715, opSD=0.0057 ms)  [HC収束: 1.4991 iters]
+Saved: results/results_proposed.json
+  高ノイズ n= 1 (h=12, w=30) ... 98.6952% (SD 0.1319, 1.2512 ms/trial, 0.0125 ms/op, max_plan=0.0286, opSD=0.0005 ms)  [HC収束: 1.0013 iters]
+Saved: results/results_proposed.json
+  高ノイズ n= 2 (h=24, w=60) ... 97.7914% (SD 0.0755, 3.0530 ms/trial, 0.0305 ms/op, max_plan=0.0153, opSD=0.0006 ms)  [HC収束: 1.0356 iters]
+Saved: results/results_proposed.json
+  高ノイズ n= 3 (h=36, w=90) ... 97.1767% (SD 0.0813, 5.7550 ms/trial, 0.0576 ms/op, max_plan=0.0266, opSD=0.0009 ms)  [HC収束: 1.1685 iters]
+Saved: results/results_proposed.json
+  高ノイズ n= 4 (h=48, w=120) ... 96.2631% (SD 0.0736, 9.3593 ms/trial, 0.0936 ms/op, max_plan=0.0986, opSD=0.0013 ms)  [HC収束: 1.3322 iters]
+Saved: results/results_proposed.json
+  高ノイズ n= 5 (h=60, w=150) ... 95.9088% (SD 0.0504, 13.6065 ms/trial, 0.1361 ms/op, max_plan=0.1015, opSD=0.0019 ms)  [HC収束: 1.9097 iters]
+Saved: results/results_proposed.json
+  高ノイズ n= 6 (h=72, w=180) ... 95.6134% (SD 0.0509, 18.9291 ms/trial, 0.1893 ms/op, max_plan=0.0767, opSD=0.0024 ms)  [HC収束: 1.7715 iters]
+Saved: results/results_proposed.json
+  高ノイズ n= 7 (h=84, w=210) ... 95.2337% (SD 0.0429, 24.8881 ms/trial, 0.2489 ms/op, max_plan=0.1217, opSD=0.0033 ms)  [HC収束: 2.0446 iters]
+Saved: results/results_proposed.json
+  高ノイズ n= 8 (h=96, w=240) ... 95.0823% (SD 0.0311, 31.8577 ms/trial, 0.3186 ms/op, max_plan=0.1224, opSD=0.0037 ms)  [HC収束: 3.4588 iters]
+Saved: results/results_proposed.json
+  高ノイズ n= 9 (h=108, w=270) ... 94.8128% (SD 0.0327, 40.3818 ms/trial, 0.4038 ms/op, max_plan=0.1350, opSD=0.0037 ms)  [HC収束: 2.6945 iters]
+Saved: results/results_proposed.json
+  高ノイズ n=10 (h=120, w=300) ... 94.6713% (SD 0.0284, 49.0464 ms/trial, 0.4905 ms/op, max_plan=0.1920, opSD=0.0052 ms)  [HC収束: 4.1745 iters]
+Saved: results/results_proposed.json
+  高ノイズ n=11 (h=132, w=330) ... 94.5189% (SD 0.0338, 58.5967 ms/trial, 0.5860 ms/op, max_plan=0.2188, opSD=0.0051 ms)  [HC収束: 4.6904 iters]
+Saved: results/results_proposed.json
+  高ノイズ n=12 (h=144, w=360) ... 94.3607% (SD 0.0237, 69.2537 ms/trial, 0.6925 ms/op, max_plan=0.2480, opSD=0.0058 ms)  [HC収束: 4.5741 iters]
+Saved: results/results_proposed.json
+  高ノイズ n=13 (h=156, w=390) ... 94.2740% (SD 0.0232, 81.5032 ms/trial, 0.8150 ms/op, max_plan=0.2781, opSD=0.0064 ms)  [HC収束: 7.9129 iters]
+Saved: results/results_proposed.json
+  高ノイズ n=14 (h=168, w=420) ... 94.1275% (SD 0.0214, 93.5834 ms/trial, 0.9358 ms/op, max_plan=0.2308, opSD=0.0064 ms)  [HC収束: 6.0472 iters]
+Saved: results/results_proposed.json
+  高ノイズ n=15 (h=180, w=450) ... 94.0639% (SD 0.0195, 108.0468 ms/trial, 1.0805 ms/op, max_plan=0.3276, opSD=0.0082 ms)  [HC収束: 9.7353 iters]
+Saved: results/results_proposed.json
+
+=== mip_scip ===
+  低ノイズ n= 1 (h=12, w=30) ... 99.9943% (SD 0.0046, 319.7871 ms/trial, 3.1979 ms/op, max_plan=7.9671, opSD=1.7853 ms)  [B&B:7621 LP:0]
+Saved: results/results_mip_scip.json
+  低ノイズ n= 2 (h=24, w=60) ... 99.9828% (SD 0.0061, 511.5714 ms/trial, 5.1157 ms/op, max_plan=13.0781, opSD=0.4304 ms)  [B&B:9980 LP:0]
+Saved: results/results_mip_scip.json
+  低ノイズ n= 3 (h=36, w=90) ... 99.9430% (SD 0.0121, 668.1905 ms/trial, 6.6819 ms/op, max_plan=485.5217, opSD=5.9894 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_scip.json
+  低ノイズ n= 4 (h=48, w=120) ... 99.8357% (SD 0.0170, 850.2084 ms/trial, 8.5021 ms/op, max_plan=180.9301, opSD=2.5016 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_scip.json
+  低ノイズ n= 5 (h=60, w=150) ... 99.7641% (SD 0.0105, 1247.9990 ms/trial, 12.4800 ms/op, max_plan=158.9212, opSD=5.6636 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_scip.json
+  低ノイズ n= 6 (h=72, w=180) ... 99.7251% (SD 0.0108, 1869.1632 ms/trial, 18.6916 ms/op, max_plan=297.7064, opSD=13.9134 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_scip.json
+  低ノイズ n= 7 (h=84, w=210) ... 99.6798% (SD 0.0105, 3497.5560 ms/trial, 34.9756 ms/op, max_plan=524.0523, opSD=40.3463 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_scip.json
+  低ノイズ n= 8 (h=96, w=240) ... 99.6435% (SD 0.0080, 3449.0545 ms/trial, 34.4905 ms/op, max_plan=473.7113, opSD=33.7828 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_scip.json
+  低ノイズ n= 9 (h=108, w=270) ... 99.6154% (SD 0.0075, 4591.2572 ms/trial, 45.9126 ms/op, max_plan=814.2986, opSD=53.4882 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_scip.json
+  低ノイズ n=10 (h=120, w=300) ... 99.5877% (SD 0.0067, 6987.9085 ms/trial, 69.8791 ms/op, max_plan=805.1314, opSD=73.2530 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_scip.json
+  低ノイズ n=11 (h=132, w=330) ... 99.5618% (SD 0.0069, 7952.6404 ms/trial, 79.5264 ms/op, max_plan=1106.6216, opSD=60.3622 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_scip.json
+  低ノイズ n=12 (h=144, w=360) ... WARNING: Orbital fixing symmetry for 0x5712068206c8 broken before symmetry. Requires fixing 6/15 affected variables.
+WARNING: Orbital fixing symmetry for 0x57120634b258 broken before symmetry. Requires fixing 4/10 affected variables.
+WARNING: Orbital fixing symmetry for 0x571203e207b8 broken before symmetry. Requires fixing 8/20 affected variables.
+WARNING: Orbital fixing symmetry for 0x571203e20868 broken before symmetry. Requires fixing 6/14 affected variables.
+WARNING: Orbital fixing symmetry for 0x571203079528 broken before symmetry. Requires fixing 10/25 affected variables.
+WARNING: Orbital fixing symmetry for 0x57120672e360 broken before symmetry. Requires fixing 9/21 affected variables.
+WARNING: Orbital fixing symmetry for 0x571205300870 broken before symmetry. Requires fixing 6/15 affected variables.
+WARNING: Orbital fixing symmetry for 0x571205300920 broken before symmetry. Requires fixing 4/16 affected variables.
+WARNING: Orbital fixing symmetry for 0x571205d5c120 broken before symmetry. Requires fixing 4/12 affected variables.
+WARNING: Orbital fixing symmetry for 0x571205d0fd48 broken before symmetry. Requires fixing 4/10 affected variables.
+WARNING: Orbital fixing symmetry for 0x571205d0fdf8 broken before symmetry. Requires fixing 9/21 affected variables.
+99.5398% (SD 0.0067, 11146.3253 ms/trial, 111.4633 ms/op, max_plan=14865.0593, opSD=225.7144 ms)  [B&B:8900 LP:0]  [TIMEOUT: cumulative plan budget=1000000.0000 ms (100.0000 ms/call x 10000 calls), observed=9592.4203 ms, completed trials=89, operations=8935]
+Saved: results/results_mip_scip.json
+  低ノイズ n=13 ... skipped (cutoff)
+  低ノイズ n=14 ... skipped (cutoff)
+  低ノイズ n=15 ... skipped (cutoff)
+  高ノイズ n= 1 (h=12, w=30) ... 98.7335% (SD 0.1299, 473.5709 ms/trial, 4.7357 ms/op, max_plan=42.0456, opSD=1.2155 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_scip.json
+  高ノイズ n= 2 (h=24, w=60) ... 97.8914% (SD 0.0743, 1776.2598 ms/trial, 17.7626 ms/op, max_plan=1752.1103, opSD=71.3879 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_scip.json
+  高ノイズ n= 3 (h=36, w=90) ... WARNING: Orbital fixing symmetry for 0x5712032955d8 broken before symmetry. Requires fixing 4/12 affected variables.
+97.2896% (SD 0.0649, 40533.3238 ms/trial, 405.3332 ms/op, max_plan=2581.9884, opSD=403.9950 ms)  [B&B:2400 LP:0]  [TIMEOUT: cumulative plan budget=1000000.0000 ms (100.0000 ms/call x 10000 calls), observed=80.1550 ms, completed trials=24, operations=2476]
+Saved: results/results_mip_scip.json
+  高ノイズ n= 4 ... skipped (cutoff)
+  高ノイズ n= 5 ... skipped (cutoff)
+  高ノイズ n= 6 ... skipped (cutoff)
+  高ノイズ n= 7 ... skipped (cutoff)
+  高ノイズ n= 8 ... skipped (cutoff)
+  高ノイズ n= 9 ... skipped (cutoff)
+  高ノイズ n=10 ... skipped (cutoff)
+  高ノイズ n=11 ... skipped (cutoff)
+  高ノイズ n=12 ... skipped (cutoff)
+  高ノイズ n=13 ... skipped (cutoff)
+  高ノイズ n=14 ... skipped (cutoff)
+  高ノイズ n=15 ... skipped (cutoff)
+
+=== greedy ===
+  低ノイズ n= 1 (h=12, w=30) ... 99.9942% (SD 0.0048, 0.8314 ms/trial, 0.0083 ms/op, max_plan=0.0073, opSD=0.0003 ms)
+Saved: results/results_greedy.json
+  低ノイズ n= 2 (h=24, w=60) ... 99.9828% (SD 0.0062, 2.4571 ms/trial, 0.0246 ms/op, max_plan=0.0150, opSD=0.0005 ms)
+Saved: results/results_greedy.json
+  低ノイズ n= 3 (h=36, w=90) ... 99.9430% (SD 0.0123, 4.8809 ms/trial, 0.0488 ms/op, max_plan=0.0206, opSD=0.0008 ms)
+Saved: results/results_greedy.json
+  低ノイズ n= 4 (h=48, w=120) ... 99.8306% (SD 0.0189, 8.4934 ms/trial, 0.0849 ms/op, max_plan=0.0434, opSD=0.0029 ms)
+Saved: results/results_greedy.json
+  低ノイズ n= 5 (h=60, w=150) ... 99.7587% (SD 0.0108, 12.0882 ms/trial, 0.1209 ms/op, max_plan=0.0499, opSD=0.0012 ms)
+Saved: results/results_greedy.json
+  低ノイズ n= 6 (h=72, w=180) ... 99.7208% (SD 0.0105, 17.3065 ms/trial, 0.1731 ms/op, max_plan=0.0831, opSD=0.0024 ms)
+Saved: results/results_greedy.json
+  低ノイズ n= 7 (h=84, w=210) ... 99.6725% (SD 0.0114, 23.2997 ms/trial, 0.2330 ms/op, max_plan=0.0690, opSD=0.0016 ms)
+Saved: results/results_greedy.json
+  低ノイズ n= 8 (h=96, w=240) ... 99.6352% (SD 0.0084, 29.3325 ms/trial, 0.2933 ms/op, max_plan=0.0722, opSD=0.0018 ms)
+Saved: results/results_greedy.json
+  低ノイズ n= 9 (h=108, w=270) ... 99.6041% (SD 0.0077, 37.6267 ms/trial, 0.3763 ms/op, max_plan=0.1112, opSD=0.0025 ms)
+Saved: results/results_greedy.json
+  低ノイズ n=10 (h=120, w=300) ... 99.5736% (SD 0.0065, 46.0660 ms/trial, 0.4607 ms/op, max_plan=0.1219, opSD=0.0028 ms)
+Saved: results/results_greedy.json
+  低ノイズ n=11 (h=132, w=330) ... 99.5452% (SD 0.0071, 55.0400 ms/trial, 0.5504 ms/op, max_plan=0.1941, opSD=0.0060 ms)
+Saved: results/results_greedy.json
+  低ノイズ n=12 (h=144, w=360) ... 99.5210% (SD 0.0065, 64.6355 ms/trial, 0.6464 ms/op, max_plan=0.2070, opSD=0.0043 ms)
+Saved: results/results_greedy.json
+  低ノイズ n=13 (h=156, w=390) ... 99.5015% (SD 0.0055, 75.3230 ms/trial, 0.7532 ms/op, max_plan=0.2533, opSD=0.0057 ms)
+Saved: results/results_greedy.json
+  低ノイズ n=14 (h=168, w=420) ... 99.4865% (SD 0.0058, 87.9850 ms/trial, 0.8799 ms/op, max_plan=0.2704, opSD=0.0050 ms)
+Saved: results/results_greedy.json
+  低ノイズ n=15 (h=180, w=450) ... 99.4653% (SD 0.0056, 100.9672 ms/trial, 1.0097 ms/op, max_plan=0.3266, opSD=0.0076 ms)
+Saved: results/results_greedy.json
+  高ノイズ n= 1 (h=12, w=30) ... 98.6951% (SD 0.1321, 1.2083 ms/trial, 0.0121 ms/op, max_plan=0.0123, opSD=0.0005 ms)
+Saved: results/results_greedy.json
+  高ノイズ n= 2 (h=24, w=60) ... 97.7844% (SD 0.0712, 2.8784 ms/trial, 0.0288 ms/op, max_plan=0.0182, opSD=0.0006 ms)
+Saved: results/results_greedy.json
+  高ノイズ n= 3 (h=36, w=90) ... 97.1627% (SD 0.0782, 5.5134 ms/trial, 0.0551 ms/op, max_plan=0.0362, opSD=0.0009 ms)
+Saved: results/results_greedy.json
+  高ノイズ n= 4 (h=48, w=120) ... 96.2525% (SD 0.0680, 8.9632 ms/trial, 0.0896 ms/op, max_plan=0.0373, opSD=0.0017 ms)
+Saved: results/results_greedy.json
+  高ノイズ n= 5 (h=60, w=150) ... 95.8771% (SD 0.0458, 13.3130 ms/trial, 0.1331 ms/op, max_plan=0.0464, opSD=0.0013 ms)
+Saved: results/results_greedy.json
+  高ノイズ n= 6 (h=72, w=180) ... 95.5870% (SD 0.0487, 18.2608 ms/trial, 0.1826 ms/op, max_plan=0.0696, opSD=0.0026 ms)
+Saved: results/results_greedy.json
+  高ノイズ n= 7 (h=84, w=210) ... 95.2117% (SD 0.0400, 24.5417 ms/trial, 0.2454 ms/op, max_plan=0.1250, opSD=0.0022 ms)
+Saved: results/results_greedy.json
+  高ノイズ n= 8 (h=96, w=240) ... 95.0333% (SD 0.0324, 31.2568 ms/trial, 0.3126 ms/op, max_plan=0.0995, opSD=0.0024 ms)
+Saved: results/results_greedy.json
+  高ノイズ n= 9 (h=108, w=270) ... 94.7905% (SD 0.0333, 38.8265 ms/trial, 0.3883 ms/op, max_plan=0.1280, opSD=0.0032 ms)
+Saved: results/results_greedy.json
+  高ノイズ n=10 (h=120, w=300) ... 94.6276% (SD 0.0285, 47.5635 ms/trial, 0.4756 ms/op, max_plan=0.1712, opSD=0.0042 ms)
+Saved: results/results_greedy.json
+  高ノイズ n=11 (h=132, w=330) ... 94.4728% (SD 0.0336, 56.6263 ms/trial, 0.5663 ms/op, max_plan=0.1327, opSD=0.0027 ms)
+Saved: results/results_greedy.json
+  高ノイズ n=12 (h=144, w=360) ... 94.3291% (SD 0.0251, 67.3445 ms/trial, 0.6734 ms/op, max_plan=0.2163, opSD=0.0047 ms)
+Saved: results/results_greedy.json
+  高ノイズ n=13 (h=156, w=390) ... 94.2122% (SD 0.0224, 78.5949 ms/trial, 0.7859 ms/op, max_plan=0.4913, opSD=0.0085 ms)
+Saved: results/results_greedy.json
+  高ノイズ n=14 (h=168, w=420) ... 94.0922% (SD 0.0220, 90.8412 ms/trial, 0.9084 ms/op, max_plan=0.3004, opSD=0.0073 ms)
+Saved: results/results_greedy.json
+  高ノイズ n=15 (h=180, w=450) ... 94.0044% (SD 0.0194, 104.0080 ms/trial, 1.0401 ms/op, max_plan=0.7319, opSD=0.0113 ms)
+Saved: results/results_greedy.json
+
+=== simple_greedy ===
+  低ノイズ n= 1 (h=12, w=30) ... 99.9290% (SD 0.0173, 0.8372 ms/trial, 0.0084 ms/op, max_plan=0.0147, opSD=0.0002 ms)
+Saved: results/results_simple_greedy.json
+  低ノイズ n= 2 (h=24, w=60) ... 99.9173% (SD 0.0118, 2.4119 ms/trial, 0.0241 ms/op, max_plan=0.0192, opSD=0.0004 ms)
+Saved: results/results_simple_greedy.json
+  低ノイズ n= 3 (h=36, w=90) ... 99.8545% (SD 0.0197, 4.6502 ms/trial, 0.0465 ms/op, max_plan=0.0146, opSD=0.0005 ms)
+Saved: results/results_simple_greedy.json
+  低ノイズ n= 4 (h=48, w=120) ... 99.7305% (SD 0.0181, 7.6042 ms/trial, 0.0760 ms/op, max_plan=0.0209, opSD=0.0010 ms)
+Saved: results/results_simple_greedy.json
+  低ノイズ n= 5 (h=60, w=150) ... 99.6835% (SD 0.0108, 11.5248 ms/trial, 0.1152 ms/op, max_plan=0.0258, opSD=0.0008 ms)
+Saved: results/results_simple_greedy.json
+  低ノイズ n= 6 (h=72, w=180) ... 99.6461% (SD 0.0124, 16.1485 ms/trial, 0.1615 ms/op, max_plan=0.0363, opSD=0.0013 ms)
+Saved: results/results_simple_greedy.json
+  低ノイズ n= 7 (h=84, w=210) ... 99.5965% (SD 0.0143, 21.4795 ms/trial, 0.2148 ms/op, max_plan=0.0484, opSD=0.0014 ms)
+Saved: results/results_simple_greedy.json
+  低ノイズ n= 8 (h=96, w=240) ... 99.4567% (SD 0.0307, 27.2683 ms/trial, 0.2727 ms/op, max_plan=0.0712, opSD=0.0018 ms)
+Saved: results/results_simple_greedy.json
+  低ノイズ n= 9 (h=108, w=270) ... 99.3059% (SD 0.0200, 34.5117 ms/trial, 0.3451 ms/op, max_plan=0.1571, opSD=0.0019 ms)
+Saved: results/results_simple_greedy.json
+  低ノイズ n=10 (h=120, w=300) ... 99.2318% (SD 0.0111, 41.6941 ms/trial, 0.4169 ms/op, max_plan=0.0685, opSD=0.0016 ms)
+Saved: results/results_simple_greedy.json
+  低ノイズ n=11 (h=132, w=330) ... 99.1900% (SD 0.0119, 50.7714 ms/trial, 0.5077 ms/op, max_plan=0.0938, opSD=0.0031 ms)
+Saved: results/results_simple_greedy.json
+  低ノイズ n=12 (h=144, w=360) ... 99.1264% (SD 0.0189, 59.5843 ms/trial, 0.5958 ms/op, max_plan=0.0871, opSD=0.0022 ms)
+Saved: results/results_simple_greedy.json
+  低ノイズ n=13 (h=156, w=390) ... 99.0433% (SD 0.0154, 68.8496 ms/trial, 0.6885 ms/op, max_plan=0.1174, opSD=0.0029 ms)
+Saved: results/results_simple_greedy.json
+  低ノイズ n=14 (h=168, w=420) ... 98.9986% (SD 0.0142, 80.1279 ms/trial, 0.8013 ms/op, max_plan=0.1075, opSD=0.0027 ms)
+Saved: results/results_simple_greedy.json
+  低ノイズ n=15 (h=180, w=450) ... 98.9698% (SD 0.0099, 89.6001 ms/trial, 0.8960 ms/op, max_plan=0.1660, opSD=0.0036 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n= 1 (h=12, w=30) ... 98.2713% (SD 0.1396, 1.0924 ms/trial, 0.0109 ms/op, max_plan=0.0081, opSD=0.0004 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n= 2 (h=24, w=60) ... 96.0484% (SD 0.1558, 2.6062 ms/trial, 0.0261 ms/op, max_plan=0.0105, opSD=0.0003 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n= 3 (h=36, w=90) ... 94.8162% (SD 0.1247, 4.9855 ms/trial, 0.0499 ms/op, max_plan=0.0181, opSD=0.0005 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n= 4 (h=48, w=120) ... 94.0904% (SD 0.0965, 8.1737 ms/trial, 0.0817 ms/op, max_plan=0.0228, opSD=0.0012 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n= 5 (h=60, w=150) ... 93.5553% (SD 0.0892, 12.1390 ms/trial, 0.1214 ms/op, max_plan=0.0360, opSD=0.0010 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n= 6 (h=72, w=180) ... 93.1930% (SD 0.0684, 16.9333 ms/trial, 0.1693 ms/op, max_plan=0.0344, opSD=0.0011 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n= 7 (h=84, w=210) ... 92.9181% (SD 0.0636, 22.8559 ms/trial, 0.2286 ms/op, max_plan=0.0407, opSD=0.0013 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n= 8 (h=96, w=240) ... 92.6851% (SD 0.0506, 28.5960 ms/trial, 0.2860 ms/op, max_plan=0.0537, opSD=0.0015 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n= 9 (h=108, w=270) ... 92.5063% (SD 0.0494, 35.8738 ms/trial, 0.3587 ms/op, max_plan=0.0618, opSD=0.0019 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n=10 (h=120, w=300) ... 92.3487% (SD 0.0436, 44.1667 ms/trial, 0.4417 ms/op, max_plan=0.0877, opSD=0.0020 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n=11 (h=132, w=330) ... 92.2137% (SD 0.0467, 53.0647 ms/trial, 0.5306 ms/op, max_plan=0.1012, opSD=0.0044 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n=12 (h=144, w=360) ... 92.0949% (SD 0.0424, 62.4324 ms/trial, 0.6243 ms/op, max_plan=0.1177, opSD=0.0026 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n=13 (h=156, w=390) ... 91.9980% (SD 0.0339, 72.8679 ms/trial, 0.7287 ms/op, max_plan=0.1133, opSD=0.0026 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n=14 (h=168, w=420) ... 91.9020% (SD 0.0312, 84.5881 ms/trial, 0.8459 ms/op, max_plan=0.1097, opSD=0.0027 ms)
+Saved: results/results_simple_greedy.json
+  高ノイズ n=15 (h=180, w=450) ... 91.8275% (SD 0.0297, 96.3374 ms/trial, 0.9634 ms/op, max_plan=0.1603, opSD=0.0030 ms)
+Saved: results/results_simple_greedy.json
+
+=== mip_glpk ===
+  低ノイズ n= 1 (h=12, w=30) ... 99.9942% (SD 0.0048, 10.1011 ms/trial, 0.1010 ms/op, max_plan=1.0373, opSD=0.0829 ms)  [B&B:7621 LP:0]
+Saved: results/results_mip_glpk.json
+  低ノイズ n= 2 (h=24, w=60) ... 99.9828% (SD 0.0060, 62.9937 ms/trial, 0.6299 ms/op, max_plan=2.3535, opSD=0.2858 ms)  [B&B:9980 LP:0]
+Saved: results/results_mip_glpk.json
+  低ノイズ n= 3 (h=36, w=90) ... 99.9436% (SD 0.0116, 174.1200 ms/trial, 1.7412 ms/op, max_plan=6.9301, opSD=0.9562 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_glpk.json
+  低ノイズ n= 4 (h=48, w=120) ... 99.8346% (SD 0.0177, 402.6487 ms/trial, 4.0265 ms/op, max_plan=74.0691, opSD=1.7450 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_glpk.json
+  低ノイズ n= 5 (h=60, w=150) ... 99.7639% (SD 0.0108, 578.4018 ms/trial, 5.7840 ms/op, max_plan=129.5054, opSD=2.2191 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_glpk.json
+  低ノイズ n= 6 (h=72, w=180) ... 99.7249% (SD 0.0108, 978.2384 ms/trial, 9.7824 ms/op, max_plan=29.7792, opSD=2.0556 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_glpk.json
+  低ノイズ n= 7 (h=84, w=210) ... 99.6798% (SD 0.0107, 2006.8412 ms/trial, 20.0684 ms/op, max_plan=385.0168, opSD=6.1641 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_glpk.json
+  低ノイズ n= 8 (h=96, w=240) ... 99.6431% (SD 0.0085, 2699.4466 ms/trial, 26.9945 ms/op, max_plan=292.7640, opSD=5.2292 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_glpk.json
+  低ノイズ n= 9 (h=108, w=270) ... 99.6149% (SD 0.0074, 4413.7407 ms/trial, 44.1374 ms/op, max_plan=105.8147, opSD=8.5506 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_glpk.json
+  低ノイズ n=10 (h=120, w=300) ... 99.5875% (SD 0.0061, 6937.7220 ms/trial, 69.3772 ms/op, max_plan=149.1650, opSD=13.2888 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_glpk.json
+  低ノイズ n=11 (h=132, w=330) ... 99.5611% (SD 0.0071, 9730.8586 ms/trial, 97.3086 ms/op, max_plan=640.8958, opSD=17.9406 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_glpk.json
+  低ノイズ n=12 (h=144, w=360) ... 99.5404% (SD 0.0059, 16067.5251 ms/trial, 160.6753 ms/op, max_plan=44860.5364, opSD=828.7086 ms)  [B&B:5800 LP:0]  [TIMEOUT: cumulative plan budget=1000000.0000 ms (100.0000 ms/call x 10000 calls), observed=44404.7292 ms, completed trials=58, operations=5892]
+Saved: results/results_mip_glpk.json
+  低ノイズ n=13 ... skipped (cutoff)
+  低ノイズ n=14 ... skipped (cutoff)
+  低ノイズ n=15 ... skipped (cutoff)
+  高ノイズ n= 1 (h=12, w=30) ... 98.7260% (SD 0.1243, 44.9221 ms/trial, 0.4492 ms/op, max_plan=1.8932, opSD=0.1174 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_glpk.json
+  高ノイズ n= 2 (h=24, w=60) ... 97.8896% (SD 0.0854, 285.6249 ms/trial, 2.8562 ms/op, max_plan=16.4210, opSD=0.9667 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_glpk.json
+  高ノイズ n= 3 (h=36, w=90) ... 97.2860% (SD 0.0696, 1337.1087 ms/trial, 13.3711 ms/op, max_plan=210.3082, opSD=11.1543 ms)  [B&B:10000 LP:0]
+Saved: results/results_mip_glpk.json
+  高ノイズ n= 4 (h=48, w=120) ... 96.5174% (SD 0.0658, 27876.2101 ms/trial, 278.7621 ms/op, max_plan=85596.7488, opSD=2012.6683 ms)  [B&B:3500 LP:0]  [TIMEOUT: cumulative plan budget=1000000.0000 ms (100.0000 ms/call x 10000 calls), observed=12875.3292 ms, completed trials=35, operations=3568]
+Saved: results/results_mip_glpk.json
+  高ノイズ n= 5 ... skipped (cutoff)
+  高ノイズ n= 6 ... skipped (cutoff)
+  高ノイズ n= 7 ... skipped (cutoff)
+  高ノイズ n= 8 ... skipped (cutoff)
+  高ノイズ n= 9 ... skipped (cutoff)
+  高ノイズ n=10 ... skipped (cutoff)
+  高ノイズ n=11 ... skipped (cutoff)
+  高ノイズ n=12 ... skipped (cutoff)
+  高ノイズ n=13 ... skipped (cutoff)
+  高ノイズ n=14 ... skipped (cutoff)
+  高ノイズ n=15 ... skipped (cutoff)
