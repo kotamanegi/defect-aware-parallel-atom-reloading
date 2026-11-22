@@ -28,7 +28,10 @@ defect-aware-parallel-atom-reloading/
 │   └── simple_run.cpp          # Simple-run program
 ├── results/                    # Experiment results in JSON format
 │   ├── results_*.json          # Benchmark results
-│   └── proposed_f_{low,high}.json  # Raw data for F(t) plots
+│   ├── proposed_f_{low,high}.json  # Raw data for F(t) plots
+│   └── independent_loss_sweep_20261108/  # Archived loss-probability sweep data
+├── experiments/
+│   └── independent_loss_sweep/ # Driver and runner for the loss-probability sweep
 ├── figures/                    # Generated figures
 ├── analysis/                   # Python analysis and plotting package (uv)
 │   ├── pyproject.toml          # Dependencies and entry points
@@ -37,6 +40,7 @@ defect-aware-parallel-atom-reloading/
 │       ├── paths.py            # Locate results/ and figures/
 │       ├── plot_metrics.py     # -> plot-metrics
 │       ├── plot_filling_rate.py # -> plot-filling-rate
+│       ├── plot_loss_sweep.py  # -> plot-loss-sweep
 │       └── trial_stats.py      # -> trial-stats
 ├── Makefile                    # Build configuration
 └── README.md                   # This file
@@ -158,8 +162,8 @@ obtain measurements with the new scope. Plotting rejects result files with
 incompatible timing scopes.
 
 ```bash
-# Evaluate all algorithms for n=1..30
-./atom_reloading -n 30
+# Evaluate all algorithms for n=1..15 (the range used in the paper; also the default)
+./atom_reloading -n 15
 
 # Evaluate only the proposed method in the high-noise case
 ./atom_reloading -a proposed -H -o results/results_proposed.json
@@ -211,13 +215,32 @@ The grid geometry is shared with benchmark mode through `makeScaledParameters()`
 # Run Baseline in the high-noise case
 ./atom_reloading_simple -n 30 -a 0 -p_idle 0.02 -p_reload 0.02
 
-# Regenerate raw data for the F(t) plots (results/proposed_f_*.json)
-./atom_reloading_simple -n 30 -a 1 -i 100 -t 100 -o results/proposed_f_low.json
-./atom_reloading_simple -n 30 -a 1 -i 100 -t 100 -p_idle 0.02 -p_reload 0.02 \
+# Regenerate raw data for the F(t) plots (results/proposed_f_*.json, n=15)
+./atom_reloading_simple -n 15 -a 1 -i 100 -t 100 -o results/proposed_f_low.json
+./atom_reloading_simple -n 15 -a 1 -i 100 -t 100 -p_idle 0.02 -p_reload 0.02 \
     -o results/proposed_f_high.json
 ```
 
 Results are saved to `execution_result.json` by default; use `-o` to change it.
+
+### Independent Loss-Probability Sweep
+
+The paper's sweep that varies `p_idle` and `p_op` independently for the proposed
+method (Fig. 7 of the revised manuscript) uses a small driver linked against
+the simulator objects, without simulator changes. The archived data are in
+`results/independent_loss_sweep_20261108/`.
+
+```bash
+# Rerun the sweep; writes to experiments/independent_loss_sweep/output/
+python3 experiments/independent_loss_sweep/run.py
+
+# Compare the rerun with the archived observations
+cmp experiments/independent_loss_sweep/output/trials.csv \
+    results/independent_loss_sweep_20261108/trials.csv
+```
+
+See [experiments/independent_loss_sweep/README.md](experiments/independent_loss_sweep/README.md)
+for the settings, parameter notes, and the expected reproducibility.
 
 ## Plotting and Analysis
 
@@ -241,6 +264,7 @@ uv sync                    # First run: install dependencies from uv.lock
 
 uv run plot-metrics        # filling_rate / runtime / max_planning_time / convergence
 uv run plot-filling-rate   # filling_rate_vs_time (F(t) plot)
+uv run plot-loss-sweep     # independent_loss_sweep (independent loss-probability sweep)
 uv run trial-stats         # Per-trial statistics and Welch's t-tests
 ```
 
@@ -348,3 +372,10 @@ the original result files, and the measured values are preserved unchanged.
 New experiments record the commit ID of the public source used to build the
 simulator. Use the archived metadata to identify each experiment's conditions;
 planning times from reruns may differ with the execution environment.
+
+The independent loss-probability sweep in `results/independent_loss_sweep_20261108/`
+was run in the development repository on 2026-11-08, after this repository was
+initialized, and records development commit
+`168d326019114516dde2f1c4ed6ff88332ceba79`. The SHA-256 hashes it records for all
+files under `src/` and `include/` match this repository's initial public release,
+and a rerun on that release reproduces its `trials.csv` byte for byte.

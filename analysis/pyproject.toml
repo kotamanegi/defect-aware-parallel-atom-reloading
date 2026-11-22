@@ -13,6 +13,7 @@ dependencies = [
 plot-metrics = "atom_reloading_analysis.plot_metrics:main"
 plot-filling-rate = "atom_reloading_analysis.plot_filling_rate:main"
 trial-stats = "atom_reloading_analysis.trial_stats:main"
+plot-loss-sweep = "atom_reloading_analysis.plot_loss_sweep:main"
 
 [build-system]
 requires = ["hatchling"]

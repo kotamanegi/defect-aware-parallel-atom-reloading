@@ -1,0 +1,173 @@
+{
+  "n": 3,
+  "storage": [
+    36,
+    90
+  ],
+  "preparation": [
+    12,
+    45
+  ],
+  "trials": 100,
+  "steps": 100,
+  "burn_in": 20,
+  "seed_base": 998244353,
+  "algorithm": 1,
+  "source": "/home/kotamanegi/projects/atom-reloading",
+  "commit": "168d326019114516dde2f1c4ed6ff88332ceba79",
+  "source_sha256": {
+    "src/algorithm_registry.cpp": "6641f0e135eb5c60518765ead323a8602e6db8c0c05a46ae3104d6b05326d2db",
+    "src/simple_run.cpp": "222210f27580406bc2966c4b0a62064927c77ee371e21bbf37946ada4b09949f",
+    "src/grid.cpp": "f32be1fd38a14063bf2acaf72fdbefd077f12962be4b001e1afb54fe542e50a2",
+    "src/main.cpp": "aa74a1f452cc3ff6d96aea88d94741bf25aea7f7f4c7b01e5fe6844d0aca8f5e",
+    "src/noise.cpp": "6e056a6b5cb7d1a973a60513612556600f2c1a8b73f2caa1e65c691c4bc58c0e",
+    "src/types.cpp": "7040e19105802ce1b8990dae5dc0d68c62892c4c75ecfd928648d5645911b785",
+    "src/benchmark_runner.cpp": "9e8cad985c5eab8ee31be790d2e9ff10ce717ee7953b03781a28fb44dd40b509",
+    "src/simulator.cpp": "a09e895ef9786afd58fd71a90792f3c44926cc55de5c5415a24c5feac8235601",
+    "src/solution/mip_scip.cpp": "a4510d260b1febcd59da85ad75d5123d0a86d751f7829f0d5096bdcf44609c03",
+    "src/solution/row_by_row.cpp": "f6a8a84c6771c0a91e3075342af8c3056ed7dd6889ff960d6a2d02597cbc73d2",
+    "src/solution/proposed.cpp": "3b787ed81d1a9b5259ec6d3c65b14d7d567c1522d4671a5f85cccfd9ce673ed1",
+    "src/solution/greedy.cpp": "03477b66faebd2f73b30c3d2045e20ab5dbc87834c3d5a9f57caeae07e4ea4d6",
+    "src/solution/baseline.cpp": "63d016d3a8ca073b922bbf812aa04334fb29a7f9378395d55bc33973957691da",
+    "src/solution/simple_greedy.cpp": "91de62b63ebdc621efe7526f438b7cc2f91d025872c275bf875db948fcc204b6",
+    "src/solution/mip_glpk.cpp": "56b9485f3e6092a13e280f84a021b43693996f27199bd7b955e81a2c8c999c32",
+    "include/experiment_defaults.h": "53c8081b42e6cae4d1eef2fd2f8d8edafbcb3d4ce199fd91b73961ff13c83528",
+    "include/experiment_metadata.h": "c4da6172863c1c2ff8196e31d292d06971d1fba3816a64584140f26c81e8b0ed",
+    "include/grid.h": "771609552e0fbf767232bd69178dc638e6aed628c356cebc58b79910a80e8158",
+    "include/algorithms.h": "26c20d519fc8aa1819d4297baeba0e4d7435b71cc09d9bf24a8bd76adcfe99bd",
+    "include/timing.h": "948df861801f6bacd5430831095f7fdbb7d2023cde9314e6c5ead59a21cdcb7f",
+    "include/noise.h": "a3ecacd6d87e2cb71c247deb740fd953e1cc2602e0d39de87e39190848643060",
+    "include/simulator.h": "6bbe1f9c00f59b12d90b658ec3da9042a0dfda9a9ea7fc0c1eaccaf61a1fa39c",
+    "include/planning_utils.h": "6bccb3e6224c6180b9dc0655bb9da553b2197162b9e7e59df9ca7403e3d5802a",
+    "include/benchmark_runner.h": "85bf6a10877da73d38cbf885fb3fceb84649110dbf16cc621fbef6f6cd33ded8",
+    "include/types.h": "db6b4fea5a0c1f284a81f4e2d974e55b2823ce295563e5a0fe3a9f65d4cfb129"
+  },
+  "results": [
+    {
+      "p_idle": 0,
+      "p_op": 0,
+      "mean": 1.0,
+      "sample_sd": 0.0
+    },
+    {
+      "p_idle": 0,
+      "p_op": 0.004,
+      "mean": 1.0,
+      "sample_sd": 0.0
+    },
+    {
+      "p_idle": 0,
+      "p_op": 0.02,
+      "mean": 1.0,
+      "sample_sd": 0.0
+    },
+    {
+      "p_idle": 0.002,
+      "p_op": 0,
+      "mean": 0.999998649691358,
+      "sample_sd": 3.2150205761393596e-06
+    },
+    {
+      "p_idle": 0.002,
+      "p_op": 0.004,
+      "mean": 0.9999423225308641,
+      "sample_sd": 1.7282995479275894e-05
+    },
+    {
+      "p_idle": 0.002,
+      "p_op": 0.02,
+      "mean": 0.999656597222222,
+      "sample_sd": 5.841596274830182e-05
+    },
+    {
+      "p_idle": 0.004,
+      "p_op": 0,
+      "mean": 0.9997018518518517,
+      "sample_sd": 8.82700842797489e-05
+    },
+    {
+      "p_idle": 0.004,
+      "p_op": 0.004,
+      "mean": 0.9994300540123454,
+      "sample_sd": 0.00012346513793449064
+    },
+    {
+      "p_idle": 0.004,
+      "p_op": 0.02,
+      "mean": 0.9975369212962953,
+      "sample_sd": 0.0003172659832763579
+    },
+    {
+      "p_idle": 0.008,
+      "p_op": 0,
+      "mean": 0.9959279320987645,
+      "sample_sd": 0.000190739130228278
+    },
+    {
+      "p_idle": 0.008,
+      "p_op": 0.004,
+      "mean": 0.9951153163580242,
+      "sample_sd": 0.0002532364185069166
+    },
+    {
+      "p_idle": 0.008,
+      "p_op": 0.02,
+      "mean": 0.9911959876543209,
+      "sample_sd": 0.00039292167290061437
+    },
+    {
+      "p_idle": 0.012,
+      "p_op": 0,
+      "mean": 0.9917469907407406,
+      "sample_sd": 0.0003116235733620025
+    },
+    {
+      "p_idle": 0.012,
+      "p_op": 0.004,
+      "mean": 0.9904617669753089,
+      "sample_sd": 0.00034483498501254915
+    },
+    {
+      "p_idle": 0.012,
+      "p_op": 0.02,
+      "mean": 0.9848579089506179,
+      "sample_sd": 0.0004955822726922907
+    },
+    {
+      "p_idle": 0.016,
+      "p_op": 0,
+      "mean": 0.9873822530864204,
+      "sample_sd": 0.00039399980105167407
+    },
+    {
+      "p_idle": 0.016,
+      "p_op": 0.004,
+      "mean": 0.985754783950618,
+      "sample_sd": 0.00038159828957014854
+    },
+    {
+      "p_idle": 0.016,
+      "p_op": 0.02,
+      "mean": 0.9788243055555549,
+      "sample_sd": 0.0005098091530668735
+    },
+    {
+      "p_idle": 0.02,
+      "p_op": 0,
+      "mean": 0.9825860339506175,
+      "sample_sd": 0.00045128262498869264
+    },
+    {
+      "p_idle": 0.02,
+      "p_op": 0.004,
+      "mean": 0.9806309413580243,
+      "sample_sd": 0.00047933991041434576
+    },
+    {
+      "p_idle": 0.02,
+      "p_op": 0.02,
+      "mean": 0.9717669367283952,
+      "sample_sd": 0.0008132565963789388
+    }
+  ]
+}
