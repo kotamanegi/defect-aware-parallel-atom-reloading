@@ -119,6 +119,7 @@ UV = uv
 figures:
 	$(UV) run --project $(ANALYSIS_DIR) plot-metrics
 	$(UV) run --project $(ANALYSIS_DIR) plot-filling-rate
+	$(UV) run --project $(ANALYSIS_DIR) plot-loss-sweep
 
 .PHONY: stats
 stats:

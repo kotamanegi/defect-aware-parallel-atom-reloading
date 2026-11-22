@@ -49,6 +49,8 @@ obj/
 
 # Files generated at runtime
 execution_result.json
+# Reruns of the independent loss-probability sweep (driver binary, build log, data)
+experiments/independent_loss_sweep/output/
 __pycache__/
 
 # Python (analysis/) virtual environments and build artifacts. Track uv.lock.

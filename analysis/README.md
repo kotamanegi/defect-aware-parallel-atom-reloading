@@ -31,6 +31,9 @@ uv run plot-metrics
 # filling_rate_vs_time (F(t) plot)
 uv run plot-filling-rate
 
+# independent_loss_sweep (independent loss-probability sweep)
+uv run plot-loss-sweep
+
 # Per-trial statistics and Welch's t-tests
 uv run trial-stats
 ```
@@ -38,7 +41,7 @@ uv run trial-stats
 You can also run these commands from the repository root:
 
 ```bash
-make figures   # Run both plot-metrics and plot-filling-rate
+make figures   # Run plot-metrics, plot-filling-rate and plot-loss-sweep
 make stats     # Run trial-stats
 ```
 
@@ -100,6 +103,7 @@ analysis/
     ├── paths.py                # Locate results/ and figures/
     ├── plot_metrics.py         # -> plot-metrics
     ├── plot_filling_rate.py    # -> plot-filling-rate
+    ├── plot_loss_sweep.py      # -> plot-loss-sweep
     └── trial_stats.py          # -> trial-stats
 ```
 
