@@ -162,8 +162,8 @@ obtain measurements with the new scope. Plotting rejects result files with
 incompatible timing scopes.
 
 ```bash
-# Evaluate all algorithms for n=1..30
-./atom_reloading -n 30
+# Evaluate all algorithms for n=1..15 (the range used in the paper; also the default)
+./atom_reloading -n 15
 
 # Evaluate only the proposed method in the high-noise case
 ./atom_reloading -a proposed -H -o results/results_proposed.json
@@ -215,9 +215,9 @@ The grid geometry is shared with benchmark mode through `makeScaledParameters()`
 # Run Baseline in the high-noise case
 ./atom_reloading_simple -n 30 -a 0 -p_idle 0.02 -p_reload 0.02
 
-# Regenerate raw data for the F(t) plots (results/proposed_f_*.json)
-./atom_reloading_simple -n 30 -a 1 -i 100 -t 100 -o results/proposed_f_low.json
-./atom_reloading_simple -n 30 -a 1 -i 100 -t 100 -p_idle 0.02 -p_reload 0.02 \
+# Regenerate raw data for the F(t) plots (results/proposed_f_*.json, n=15)
+./atom_reloading_simple -n 15 -a 1 -i 100 -t 100 -o results/proposed_f_low.json
+./atom_reloading_simple -n 15 -a 1 -i 100 -t 100 -p_idle 0.02 -p_reload 0.02 \
     -o results/proposed_f_high.json
 ```
 
