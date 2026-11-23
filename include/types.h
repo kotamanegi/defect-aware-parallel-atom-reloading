@@ -35,9 +35,8 @@ Parameters makeScaledParameters(int n, double p_idle, double p_reload,
 // Parameters for a partial reloading instruction.
 struct ReloadParams
 {
-    std::set<int> R;                    // Selected row indices.
-    std::set<int> C;                    // Selected column indices.
-    std::vector<std::pair<int, int>> F; // Reloading sites.
+    std::set<int> R; // Selected row indices.
+    std::set<int> C; // Selected column indices.
 };
 
 // Planning RNG; physical noise uses independent streams in TrialNoise.

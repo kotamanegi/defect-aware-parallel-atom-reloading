@@ -8,11 +8,18 @@ A simulator for atom reloading algorithms in neutral-atom quantum computers.
 defect-aware-parallel-atom-reloading/
 ├── include/                    # Header files
 │   ├── types.h                 # Core type definitions
+│   ├── experiment_defaults.h   # Default experiment parameters
+│   ├── experiment_metadata.h   # Shared JSON experiment metadata writer
+│   ├── noise.h                 # Per-trial RNG streams and noise masks
+│   ├── timing.h                # Wall-clock timing helper
 │   ├── grid.h                  # Grid operations
+│   ├── planning_utils.h        # Shared input validation and index helpers
 │   ├── algorithms.h            # Algorithm interfaces and registry
-│   └── simulator.h             # Simulator interface
+│   ├── simulator.h             # Simulator interface
+│   └── benchmark_runner.h      # Forked cumulative-budget benchmark worker
 ├── src/                        # Source files
 │   ├── types.cpp               # Global variables and grid geometry
+│   ├── noise.cpp               # Deterministic noise stream generation
 │   ├── algorithm_registry.cpp  # Algorithm registry (one entry per method)
 │   ├── grid.cpp                # Grid operations
 │   ├── solution/               # Algorithm implementations
@@ -24,19 +31,28 @@ defect-aware-parallel-atom-reloading/
 │   │   ├── mip_glpk.cpp        # MIP (GLPK)
 │   │   └── row_by_row.cpp      # Cyclic row-by-row comparator
 │   ├── simulator.cpp           # Simulator implementation
+│   ├── benchmark_runner.cpp    # POSIX child-process budget watchdog
 │   ├── main.cpp                # Benchmark program
 │   └── simple_run.cpp          # Simple-run program
+├── tests/                      # Regression and integration tests
+│   ├── algorithms_test.cpp     # Exhaustive small-instance and algorithm checks
+│   ├── benchmark_runner_test.cpp # Cumulative-budget watchdog tests
+│   └── benchmark_cli_test.py   # CLI / JSON integration tests
 ├── results/                    # Experiment results in JSON format
 │   ├── results_*.json          # Benchmark results
 │   ├── proposed_f_{low,high}.json  # Raw data for F(t) plots
 │   └── independent_loss_sweep_20261108/  # Archived loss-probability sweep data
 ├── experiments/
 │   └── independent_loss_sweep/ # Driver and runner for the loss-probability sweep
+│       ├── driver.cpp          # Sweep driver linked against simulator objects
+│       └── run.py              # Build, run, and summarize the sweep
 ├── figures/                    # Generated figures
 ├── analysis/                   # Python analysis and plotting package (uv)
 │   ├── pyproject.toml          # Dependencies and entry points
 │   ├── uv.lock                 # Pinned dependency versions
+│   ├── filling_rate_table.py   # LaTeX comparison table generator
 │   └── src/atom_reloading_analysis/
+│       ├── environments.py     # Normalize current and historical noise labels
 │       ├── paths.py            # Locate results/ and figures/
 │       ├── plot_metrics.py     # -> plot-metrics
 │       ├── plot_filling_rate.py # -> plot-filling-rate

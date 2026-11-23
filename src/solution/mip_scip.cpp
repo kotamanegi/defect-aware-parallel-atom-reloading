@@ -10,7 +10,7 @@
 // from the paper. Nonnegative coefficients (vacancy=1) enforce z = x*y at integer optima.
 // Find an optimal solution without a solver time limit or heuristic fallback.
 
-#include "../../include/algorithms.h"
+#include "algorithms.h"
 #include <scip/scip.h>
 #include <scip/scipdefplugins.h>
 #include <vector>
@@ -19,14 +19,9 @@
 #include <cstdlib>
 
 static int s_bb_ok = 0;
-static int s_lp_fallback = 0;
 
-void resetMipStatsScip() { s_bb_ok = s_lp_fallback = 0; }
-void getMipStatsScip(int &bb_ok, int &lp_fallback)
-{
-    bb_ok = s_bb_ok;
-    lp_fallback = s_lp_fallback;
-}
+void resetMipStatsScip() { s_bb_ok = 0; }
+int getMipSolvedCountScip() { return s_bb_ok; }
 
 ReloadParams mipMethodScip(const Grid &A, int t, int m_r, int m_c, double p_op)
 {

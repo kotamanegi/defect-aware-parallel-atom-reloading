@@ -8,7 +8,7 @@
 // Maximize sum(z) - p_op*sum(b*xi_b); the latter penalizes operation failures over the selected area.
 // Find an optimal solution without a solver time limit or heuristic fallback.
 
-#include "../../include/algorithms.h"
+#include "algorithms.h"
 #include <glpk.h>
 #include <cstdio>
 #include <cstdlib>
@@ -16,14 +16,9 @@
 #include <set>
 
 static int s_bb_ok = 0;
-static int s_lp_fallback = 0;
 
-void resetMipStatsGlpk() { s_bb_ok = s_lp_fallback = 0; }
-void getMipStatsGlpk(int &bb_ok, int &lp_fallback)
-{
-    bb_ok = s_bb_ok;
-    lp_fallback = s_lp_fallback;
-}
+void resetMipStatsGlpk() { s_bb_ok = 0; }
+int getMipSolvedCountGlpk() { return s_bb_ok; }
 
 // MIP-based method using GLPK.
 ReloadParams mipMethodGlpk(const Grid &A, int t, int m_r, int m_c, double p_op)

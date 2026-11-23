@@ -5,10 +5,10 @@
 #include <fstream>
 #include <string>
 #include <filesystem>
-#include "../include/types.h"
-#include "../include/simulator.h"
-#include "../include/algorithms.h"
-#include "../include/experiment_metadata.h"
+#include "types.h"
+#include "simulator.h"
+#include "algorithms.h"
+#include "experiment_metadata.h"
 
 // Join registered methods as "0:Baseline, 1:Proposed, ..." for help output.
 static std::string algorithmChoiceList()
@@ -24,7 +24,7 @@ static std::string algorithmChoiceList()
 int main(int argc, char *argv[])
 {
     // Set command-line defaults.
-    int n = experiment_defaults::simple_n; // Default scale factor (the paper's simple-run experiment uses n=30).
+    int n = experiment_defaults::simple_n; // Default scale factor (n=15).
     int algorithm = 1; // Default to Proposed; see the registry for all algorithm IDs.
     double p_idle = 0.004;   // Default for the low-noise case.
     double p_reload = 0.004; // Default matches p_idle.

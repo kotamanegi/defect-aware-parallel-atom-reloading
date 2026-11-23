@@ -1,4 +1,4 @@
-#include "../include/types.h"
+#include "types.h"
 
 // Planning RNG, separate from physical noise.
 std::mt19937 rng;

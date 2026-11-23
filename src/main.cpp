@@ -9,11 +9,11 @@
 #include <algorithm>
 #include <limits>
 #include <numeric>
-#include "../include/types.h"
-#include "../include/simulator.h"
-#include "../include/algorithms.h"
-#include "../include/benchmark_runner.h"
-#include "../include/experiment_metadata.h"
+#include "types.h"
+#include "simulator.h"
+#include "algorithms.h"
+#include "benchmark_runner.h"
+#include "experiment_metadata.h"
 
 // Join registered method names as "a, b, c" for help output.
 static std::string algorithmNameList()
@@ -333,8 +333,8 @@ int main(int argc, char *argv[]) try
                       << per_op_ms << " ms/op"
                       << ", max_plan=" << r.max_planning_wall_ms
                       << ", opSD=" << r.per_op_planning_wall_ms_std << " ms)";
-            if (spec->get_mip_stats) {
-                std::cout << "  [B&B:" << stats.mip_ok << " LP:" << stats.mip_fallback << "]";
+            if (spec->get_mip_solved_count) {
+                std::cout << "  [B&B:" << stats.mip_solved << "]";
             }
             if (r.avg_convergence_iterations >= 0) {
                 std::cout << "  [HC convergence: " << r.avg_convergence_iterations

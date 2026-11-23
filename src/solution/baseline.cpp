@@ -1,4 +1,4 @@
-#include "../include/algorithms.h"
+#include "algorithms.h"
 
 // Baseline method (Chiu et al.).
 // Select one third of rows and half of columns using a fixed pattern (m_r and m_c are unused).
