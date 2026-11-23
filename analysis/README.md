@@ -53,6 +53,8 @@ to standard output, and the script uses only the Python standard library.
 
 ```bash
 python3 analysis/filling_rate_table.py --n 3 > /path/to/filling-rate-table.tex
+# Or via uv once the analysis package is synced:
+uv run --project analysis filling-rate-table --n 3 > /path/to/filling-rate-table.tex
 ```
 
 Filling rates and standard deviations use four decimal places for every method,
@@ -96,11 +98,14 @@ ATOM_RELOADING_ROOT=/path/to/repo uv run plot-metrics
 
 ```text
 analysis/
-├── pyproject.toml   # Dependencies and entry points
-├── uv.lock          # Pinned versions (commit this file)
+├── pyproject.toml           # Dependencies and entry points
+├── uv.lock                  # Pinned versions (commit this file)
+├── filling_rate_table.py    # Standalone wrapper (stdlib only)
 └── src/atom_reloading_analysis/
     ├── environments.py         # Normalize current and historical noise labels
     ├── paths.py                # Locate results/ and figures/
+    ├── results.py              # Shared method metadata, JSON loaders, and validators
+    ├── filling_rate_table.py   # -> filling-rate-table
     ├── plot_metrics.py         # -> plot-metrics
     ├── plot_filling_rate.py    # -> plot-filling-rate
     ├── plot_loss_sweep.py      # -> plot-loss-sweep

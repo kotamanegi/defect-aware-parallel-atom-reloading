@@ -53,10 +53,11 @@ $(GIT_COMMIT_HEADER): FORCE | $(OBJ_DIR)
 TARGET_TEST = $(OBJ_DIR)/tests/algorithms_test
 TARGET_BENCHMARK_TEST = $(OBJ_DIR)/tests/benchmark_runner_test
 .PHONY: test
-test: $(TARGET_TEST) $(TARGET_BENCHMARK_TEST) $(TARGET_BENCHMARK)
+test: $(TARGET_TEST) $(TARGET_BENCHMARK_TEST) $(TARGET_BENCHMARK) $(TARGET_SIMPLE)
 	./$(TARGET_TEST)
 	./$(TARGET_BENCHMARK_TEST)
 	python3 tests/benchmark_cli_test.py
+	python3 tests/analysis_test.py
 
 $(TARGET_TEST): tests/algorithms_test.cpp $(COMMON_OBJECTS) $(wildcard $(INC_DIR)/*.h)
 	mkdir -p $(dir $@)

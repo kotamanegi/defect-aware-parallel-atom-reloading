@@ -9,34 +9,46 @@
 // Find an optimal solution without a solver time limit or heuristic fallback.
 
 #include "algorithms.h"
+#include "planning_utils.h"
 #include <glpk.h>
-#include <cstdio>
-#include <cstdlib>
+#include <stdexcept>
+#include <string>
 #include <vector>
-#include <set>
 
-static int s_bb_ok = 0;
+namespace {
+int s_bb_ok = 0;
+
+struct GlpkProblem {
+    glp_prob *prob = nullptr;
+    GlpkProblem() : prob(glp_create_prob())
+    {
+        if (!prob) throw std::runtime_error("GLPK: glp_create_prob failed");
+    }
+    ~GlpkProblem()
+    {
+        if (prob) glp_delete_prob(prob);
+    }
+    GlpkProblem(const GlpkProblem &) = delete;
+    GlpkProblem &operator=(const GlpkProblem &) = delete;
+};
+} // namespace
 
 void resetMipStatsGlpk() { s_bb_ok = 0; }
 int getMipSolvedCountGlpk() { return s_bb_ok; }
 
 // MIP-based method using GLPK.
-ReloadParams mipMethodGlpk(const Grid &A, int t, int m_r, int m_c, double p_op)
+ReloadParams mipMethodGlpk(const Grid &A, int /*t*/, int m_r, int m_c, double p_op)
 {
-    int h = A.size();
-    int w = A[0].size();
+    const auto [h, w] = planning_detail::dimensions(A, m_r, m_c, p_op);
+    if (h == 0 || w == 0 || m_r == 0 || m_c == 0)
+        return {};
 
     // Enumerate vacant sites.
-    std::vector<std::pair<int, int>> empty_pos;
-    empty_pos.reserve(h * w / 4);
-    for (int r = 0; r < h; r++)
-        for (int c = 0; c < w; c++)
-            if (A[r][c] == 0)
-                empty_pos.push_back({r, c});
-    int ne = (int)empty_pos.size();
+    const auto empty_pos = planning_detail::collectVacancies(A);
+    const int ne = static_cast<int>(empty_pos.size());
 
-    // A no-op is optimal when there are no vacancies or capacity is zero.
-    if (ne == 0 || m_r == 0 || m_c == 0)
+    // A no-op is optimal when there are no vacancies.
+    if (ne == 0)
         return {};
 
     // Build the GLPK model.
@@ -44,25 +56,25 @@ ReloadParams mipMethodGlpk(const Grid &A, int t, int m_r, int m_c, double p_op)
     //   x_r: 1 .. h
     //   y_c: h+1 .. h+w
     //   z_k: h+w+1 .. h+w+ne
-    glp_prob *mip = glp_create_prob();
+    GlpkProblem guard;
+    glp_prob *mip = guard.prob;
     glp_set_obj_dir(mip, GLP_MAX);
 
     const int mu_start = h + w + ne + 1;
     const int xi_start = mu_start + m_c + 1;
-    int total_vars = h + w + ne + 2 * (m_c + 1);
+    const int total_vars = h + w + ne + 2 * (m_c + 1);
     glp_add_cols(mip, total_vars);
 
     // x_r: binary
-    for (int r = 0; r < h; r++)
+    for (int r = 0; r < h; ++r)
         glp_set_col_kind(mip, r + 1, GLP_BV);
 
     // y_c: binary
-    for (int c = 0; c < w; c++)
+    for (int c = 0; c < w; ++c)
         glp_set_col_kind(mip, h + c + 1, GLP_BV);
 
     // z_k: continuous, with objective coefficient 1.
-    for (int k = 0; k < ne; k++)
-    {
+    for (int k = 0; k < ne; ++k) {
         glp_set_col_bnds(mip, h + w + k + 1, GLP_DB, 0.0, 1.0);
         glp_set_obj_coef(mip, h + w + k + 1, 1.0);
     }
@@ -122,18 +134,16 @@ ReloadParams mipMethodGlpk(const Grid &A, int t, int m_r, int m_c, double p_op)
         coefficient(xi_bound + b, xi_start + b, 1.0);
         coefficient(xi_bound + b, mu_start + b, -m_r);
     }
-    glp_load_matrix(mip, ar.size() - 1, ia.data(), ja.data(), ar.data());
+    glp_load_matrix(mip, static_cast<int>(ar.size()) - 1, ia.data(), ja.data(), ar.data());
 
     // Step 1: Solve the LP relaxation to obtain the initial basis for branch and bound.
     glp_smcp sparm;
     glp_init_smcp(&sparm);
     sparm.msg_lev = GLP_MSG_OFF;
-    int lp_ret = glp_simplex(mip, &sparm);
-    if (lp_ret != 0 || glp_get_status(mip) != GLP_OPT)
-    {
-        std::fprintf(stderr, "GLPK: LP relaxation failed (ret=%d, status=%d)\n",
-                     lp_ret, glp_get_status(mip));
-        std::exit(1);
+    const int lp_ret = glp_simplex(mip, &sparm);
+    if (lp_ret != 0 || glp_get_status(mip) != GLP_OPT) {
+        throw std::runtime_error("GLPK: LP relaxation failed (ret=" + std::to_string(lp_ret) +
+                                 ", status=" + std::to_string(glp_get_status(mip)) + ")");
     }
 
     // Step 2: Solve the MIP exactly, with no time limit.
@@ -142,26 +152,21 @@ ReloadParams mipMethodGlpk(const Grid &A, int t, int m_r, int m_c, double p_op)
     iparm.msg_lev = GLP_MSG_OFF;
     iparm.presolve = GLP_OFF; // Reuse the LP basis.
 
-    int mip_ret = glp_intopt(mip, &iparm);
-    int mip_stat = glp_mip_status(mip);
-    if (mip_ret != 0 || mip_stat != GLP_OPT)
-    {
-        std::fprintf(stderr, "GLPK: B&B failed (ret=%d, status=%d)\n",
-                     mip_ret, mip_stat);
-        std::exit(1);
+    const int mip_ret = glp_intopt(mip, &iparm);
+    const int mip_stat = glp_mip_status(mip);
+    if (mip_ret != 0 || mip_stat != GLP_OPT) {
+        throw std::runtime_error("GLPK: B&B failed (ret=" + std::to_string(mip_ret) +
+                                 ", status=" + std::to_string(mip_stat) + ")");
     }
 
     ReloadParams params;
-    for (int r = 0; r < h; r++)
+    for (int r = 0; r < h; ++r)
         if (glp_mip_col_val(mip, r + 1) > 0.5)
             params.R.insert(r);
-    for (int c = 0; c < w; c++)
+    for (int c = 0; c < w; ++c)
         if (glp_mip_col_val(mip, h + c + 1) > 0.5)
             params.C.insert(c);
     ++s_bb_ok;
 
-    glp_delete_prob(mip);
-
-    (void)t; // Unused parameter, retained for future iteration-dependent extensions.
     return params;
 }

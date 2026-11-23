@@ -10,6 +10,7 @@ defect-aware-parallel-atom-reloading/
 │   ├── types.h                 # Core type definitions
 │   ├── experiment_defaults.h   # Default experiment parameters
 │   ├── experiment_metadata.h   # Shared JSON experiment metadata writer
+│   ├── experiment_utils.h      # Shared CLI parsing, statistics, and JSON helpers
 │   ├── noise.h                 # Per-trial RNG streams and noise masks
 │   ├── timing.h                # Wall-clock timing helper
 │   ├── grid.h                  # Grid operations
@@ -37,7 +38,8 @@ defect-aware-parallel-atom-reloading/
 ├── tests/                      # Regression and integration tests
 │   ├── algorithms_test.cpp     # Exhaustive small-instance and algorithm checks
 │   ├── benchmark_runner_test.cpp # Cumulative-budget watchdog tests
-│   └── benchmark_cli_test.py   # CLI / JSON integration tests
+│   ├── benchmark_cli_test.py   # CLI / JSON integration tests
+│   └── analysis_test.py        # Python analysis package unit tests
 ├── results/                    # Experiment results in JSON format
 │   ├── results_*.json          # Benchmark results
 │   ├── proposed_f_{low,high}.json  # Raw data for F(t) plots
@@ -50,10 +52,12 @@ defect-aware-parallel-atom-reloading/
 ├── analysis/                   # Python analysis and plotting package (uv)
 │   ├── pyproject.toml          # Dependencies and entry points
 │   ├── uv.lock                 # Pinned dependency versions
-│   ├── filling_rate_table.py   # LaTeX comparison table generator
+│   ├── filling_rate_table.py   # Standalone LaTeX table wrapper (stdlib only)
 │   └── src/atom_reloading_analysis/
 │       ├── environments.py     # Normalize current and historical noise labels
 │       ├── paths.py            # Locate results/ and figures/
+│       ├── results.py          # Shared method metadata, loaders, and validators
+│       ├── filling_rate_table.py # -> filling-rate-table
 │       ├── plot_metrics.py     # -> plot-metrics
 │       ├── plot_filling_rate.py # -> plot-filling-rate
 │       ├── plot_loss_sweep.py  # -> plot-loss-sweep

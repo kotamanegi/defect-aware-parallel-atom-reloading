@@ -7,6 +7,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 BINARY = ROOT / "atom_reloading"
+SIMPLE_BINARY = ROOT / "atom_reloading_simple"
 
 
 def run(cwd, *args):
@@ -58,10 +59,45 @@ with tempfile.TemporaryDirectory(prefix="benchmark-test-", dir=ROOT / "obj") as 
     assert 0 < row["filling_rate"] <= 1
     assert "timeout_trial" not in row
 
-    for args in (["-c"], *(["-c", value] for value in
-                          ["0", "-1", "nan", "inf", "1e300", "100oops", "oops"])):
+    for args in (
+        ["-c"],
+        *(["-c", value] for value in ["0", "-1", "nan", "inf", "1e300", "100oops", "oops"]),
+        ["-n"],
+        ["-n", "0"],
+        ["-n", "abc"],
+        ["--unknown-flag"],
+    ):
         result = subprocess.run([str(BINARY), *args], cwd=directory,
                                 capture_output=True, text=True, timeout=5)
-        assert result.returncode != 0 and "Error:" in result.stderr, result
+        assert result.returncode != 0 and "Error:" in result.stderr, (args, result)
+
+    # Simple-run CLI validation and basic execution check.
+    simple_out = directory / "simple.json"
+    subprocess.run(
+        [str(SIMPLE_BINARY), "-n", "1", "-a", "0", "-i", "25", "-t", "2",
+         "-o", str(simple_out)],
+        cwd=directory, capture_output=True, text=True, timeout=10, check=True,
+    )
+    simple_data = json.loads(simple_out.read_text())
+    assert simple_data["parameters"]["n"] == 1
+    assert simple_data["parameters"]["num_trials"] == 2
+    assert simple_data["algorithm"]["name"] == "baseline"
+    assert len(simple_data["iterations"]) == 25
+    assert 0 < simple_data["average_filling_rate"] <= 1
+
+    for args in (
+        ["-n", "0"],
+        ["-n", "abc"],
+        ["-p_idle", "-0.1"],
+        ["-p_reload", "1.5"],
+        ["-i", "20"],
+        ["-t", "0"],
+        ["-s", "-1"],
+        ["-a", "999"],
+        ["--unknown-flag"],
+    ):
+        result = subprocess.run([str(SIMPLE_BINARY), *args], cwd=directory,
+                                capture_output=True, text=True, timeout=5)
+        assert result.returncode != 0 and "Error:" in result.stderr, (args, result)
 
 print("Benchmark CLI / JSON tests passed.")

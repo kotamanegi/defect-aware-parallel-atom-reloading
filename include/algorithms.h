@@ -2,6 +2,7 @@
 #define ALGORITHMS_H
 
 #include "types.h"
+#include <iosfwd>
 #include <string>
 #include <utility>
 #include <vector>
@@ -74,6 +75,11 @@ struct AlgorithmSpec
     // Count solved branch-and-bound instances separately for each solver.
     void (*reset_mip_stats)() = nullptr;
     int (*get_mip_solved_count)() = nullptr;
+
+    // Benchmark reporting options for method-specific metadata and precision.
+    bool report_hill_climb_stats = false;
+    int json_precision = 6;
+    void (*write_extra_json_metadata)(std::ostream &out) = nullptr;
 };
 
 // All registered methods, sorted by ascending ID.

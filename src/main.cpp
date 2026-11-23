@@ -1,19 +1,19 @@
-#include <iostream>
-#include <vector>
-#include <iomanip>
+#include <algorithm>
 #include <cmath>
 #include <fstream>
-#include <string>
+#include <iomanip>
+#include <iostream>
 #include <map>
-#include <filesystem>
-#include <algorithm>
-#include <limits>
 #include <numeric>
+#include <stdexcept>
+#include <string>
+#include <vector>
 #include "types.h"
 #include "simulator.h"
 #include "algorithms.h"
 #include "benchmark_runner.h"
 #include "experiment_metadata.h"
+#include "experiment_utils.h"
 
 // Join registered method names as "a, b, c" for help output.
 static std::string algorithmNameList()
@@ -26,21 +26,27 @@ static std::string algorithmNameList()
     return s;
 }
 
+struct BenchmarkCase {
+    std::string environment;
+    int n;
+    Parameters params;
+};
+
 struct AlgoResult {
     std::string environment;
     bool timed_out = false;
     size_t num_operations_done = 0;
     double elapsed_ms = 0.0;
     double timeout_planning_wall_ms = 0.0;
-    int n;      // Scale factor (h=12n, w=30n).
-    int h, w;
-    int m_r, m_c;
-    double p_idle;
-    double p_reload;
+    int n = 0;  // Scale factor (h=12n, w=30n).
+    int h = 0, w = 0;
+    int m_r = 0, m_c = 0;
+    double p_idle = 0.0;
+    double p_reload = 0.0;
     double filling_rate = 0.0;
-    double filling_rate_std;                  // Sample standard deviation across trials.
-    double runtime_ms;                        // Mean total planning time per trial (ms).
-    double runtime_ms_std;                    // Sample standard deviation of total planning time across trials.
+    double filling_rate_std = 0.0;            // Sample standard deviation across trials.
+    double runtime_ms = 0.0;                  // Mean total planning time per trial (ms).
+    double runtime_ms_std = 0.0;              // Sample standard deviation of total planning time across trials.
     double max_planning_wall_ms = 0.0;        // Maximum planning wall time over all trials and operations (ms).
     double per_op_planning_wall_ms_std = 0.0; // Sample standard deviation of planning wall time over all operations (ms).
     double avg_convergence_iterations = -1.0; // Mean hill-climbing iterations until convergence (Proposed only).
@@ -49,48 +55,24 @@ struct AlgoResult {
     std::vector<double> trial_runtimes_ms;    // Total planning time for each trial.
 };
 
-// Sample standard deviation (divide by n-1).
-static double sampleStd(const std::vector<double> &v)
-{
-    if (v.size() < 2) return 0.0;
-    double mean = 0.0;
-    for (double x : v) mean += x;
-    mean /= v.size();
-    double sq = 0.0;
-    for (double x : v) sq += (x - mean) * (x - mean);
-    return std::sqrt(sq / (v.size() - 1));
-}
-
 static void writeJson(
     const std::string &filename,
-    const std::string &algo,
-    int seed_base, int num_trials, int num_iterations,
+    const AlgorithmSpec &spec,
+    std::uint64_t seed_base, int num_trials, int num_iterations,
     double budget_ms_per_plan_call,
     const std::vector<AlgoResult> &rows)
 {
-    // Create the output directory (e.g. results/) if needed.
-    std::filesystem::path out_path(filename);
-    if (out_path.has_parent_path()) {
-        std::error_code ec;
-        std::filesystem::create_directories(out_path.parent_path(), ec);
-    }
+    experiment_utils::ensureParentDirectory(filename);
 
     std::ofstream f(filename);
-    if (!f.is_open()) {
-        std::cerr << "Failed to open: " << filename << "\n";
-        return;
-    }
-    f << std::fixed << std::setprecision(6);
+    if (!f.is_open())
+        throw std::runtime_error("Failed to open output file: " + filename);
+
+    f << std::fixed << std::setprecision(spec.json_precision);
     f << "{\n";
-    f << "  \"algorithm\": \"" << algo << "\",\n";
-    if (algo == "row_by_row") {
-        f << std::setprecision(12);
-        f << "  \"experiment_role\": \"additional_row_by_row_comparison\",\n";
-        f << "  \"row_selection_policy\": \"cyclic row (t-1) mod h; full rows consume a step\",\n";
-        f << "  \"column_selection_policy\": \"defects only, ascending column index, at most m_c\",\n";
-        f << "  \"time_model\": \"one row attempt per unit-time operation; same per-step noise as main experiments\",\n";
-        f << "  \"interpretation\": \"finite-horizon mean; burn-in does not establish stationarity for this comparator\",\n";
-    }
+    f << "  \"algorithm\": \"" << spec.name << "\",\n";
+    if (spec.write_extra_json_metadata)
+        spec.write_extra_json_metadata(f);
     f << "  \"seed_base\": " << seed_base << ",\n";
     writeExperimentMetadata(f, num_trials);
     f << "  \"num_trials\": " << num_trials << ",\n";
@@ -107,7 +89,7 @@ static void writeJson(
       << experiment_defaults::burn_in + 1 << ".." << num_iterations
       << " (burn-in=" << experiment_defaults::burn_in << ")\",\n";
     f << "  \"results\": [\n";
-    for (size_t i = 0; i < rows.size(); i++) {
+    for (size_t i = 0; i < rows.size(); ++i) {
         const auto &r = rows[i];
         f << "    {\n";
         f << "      \"environment\": \"" << r.environment << "\",\n";
@@ -134,9 +116,9 @@ static void writeJson(
         f << "      \"p_idle\": " << r.p_idle << ",\n";
         f << "      \"p_reload\": " << r.p_reload << ",\n";
         metric("filling_rate", r.filling_rate, has_trials);
-        metric("filling_rate_percent", (r.filling_rate * 100), has_trials);
+        metric("filling_rate_percent", r.filling_rate * 100.0, has_trials);
         metric("filling_rate_std", r.filling_rate_std, has_trials);
-        metric("filling_rate_percent_std", (r.filling_rate_std * 100), has_trials);
+        metric("filling_rate_percent_std", r.filling_rate_std * 100.0, has_trials);
         f << "      \"num_trials_done\": " << r.trial_filling_rates.size() << ",\n";
         metric("runtime_ms", r.runtime_ms, has_trials);
         metric("runtime_ms_std", r.runtime_ms_std, has_trials);
@@ -148,18 +130,11 @@ static void writeJson(
             f << ",\n      \"avg_convergence_iterations\": " << r.avg_convergence_iterations;
         if (r.avg_discarded_atoms >= 0)
             f << ",\n      \"avg_discarded_atoms\": " << r.avg_discarded_atoms;
-        f << ",\n      \"trial_filling_rates\": [";
-        for (size_t j = 0; j < r.trial_filling_rates.size(); j++) {
-            if (j) f << ", ";
-            f << r.trial_filling_rates[j];
-        }
-        f << "],\n";
-        f << "      \"trial_runtimes_ms\": [";
-        for (size_t j = 0; j < r.trial_runtimes_ms.size(); j++) {
-            if (j) f << ", ";
-            f << r.trial_runtimes_ms[j];
-        }
-        f << "]\n";
+        f << ",\n      \"trial_filling_rates\": ";
+        experiment_utils::writeJsonDoubleArray(f, r.trial_filling_rates);
+        f << ",\n      \"trial_runtimes_ms\": ";
+        experiment_utils::writeJsonDoubleArray(f, r.trial_runtimes_ms);
+        f << "\n";
         f << "    }";
         if (i + 1 < rows.size()) f << ",";
         f << "\n";
@@ -178,7 +153,7 @@ static void printUsage(const char *prog)
     std::cerr << "  -n  Maximum scale factor n (default: " << experiment_defaults::n_max << ", min: " << experiment_defaults::n_min << ")\n";
     std::cerr << "  -c  Per-plan-call average budget in ms. The run is stopped when the cumulative plan "
                   "time exceeds c x (trials x iterations) ms (default: 100)\n";
-    std::cerr << "  -H  High-noise-only (p_idle=0.02 only; default: both noise levels)\n";
+    std::cerr << "  -H  High-noise-only (p_idle=" << experiment_defaults::high_noise << " only; default: both noise levels)\n";
 }
 
 int main(int argc, char *argv[]) try
@@ -189,30 +164,30 @@ int main(int argc, char *argv[]) try
     double budget_ms_per_plan_call = 100.0;
     bool high_noise_only = false;
 
-    for (int i = 1; i < argc; i++) {
-        std::string arg = argv[i];
-        if ((arg == "-a" || arg == "--algorithm") && i + 1 < argc)
-            algo = argv[++i];
-        else if ((arg == "-o" || arg == "--output") && i + 1 < argc)
-            output_file = argv[++i];
-        else if ((arg == "-n" || arg == "--nmax") && i + 1 < argc)
-            n_max = std::atoi(argv[++i]);
-        else if (arg == "-c" || arg == "--cutoff") {
-            if (++i == argc) throw std::invalid_argument("-c requires a duration in milliseconds");
-            const std::string value = argv[i];
-            size_t parsed = 0;
-            budget_ms_per_plan_call = std::stod(value, &parsed);
-            if (parsed != value.size() || !std::isfinite(budget_ms_per_plan_call) ||
-                budget_ms_per_plan_call <= 0 ||
-                budget_ms_per_plan_call >= static_cast<double>(std::numeric_limits<long long>::max()) / 1000.0)
-                throw std::invalid_argument("-c must be a finite positive duration in milliseconds");
-        }
-        else if (arg == "-H" || arg == "--high-only")
+    for (int i = 1; i < argc; ++i) {
+        const std::string arg = argv[i];
+        if (arg == "-a" || arg == "--algorithm") {
+            algo = experiment_utils::requireArgValue(i, argc, argv, arg);
+        } else if (arg == "-o" || arg == "--output") {
+            output_file = experiment_utils::requireArgValue(i, argc, argv, arg);
+        } else if (arg == "-n" || arg == "--nmax") {
+            n_max = experiment_utils::parseIntArg(arg, experiment_utils::requireArgValue(i, argc, argv, arg));
+        } else if (arg == "-c" || arg == "--cutoff") {
+            budget_ms_per_plan_call = experiment_utils::parseBudgetMsArg(
+                arg, experiment_utils::requireArgValue(i, argc, argv, arg));
+        } else if (arg == "-H" || arg == "--high-only") {
             high_noise_only = true;
-        else if (arg == "-h" || arg == "--help") {
+        } else if (arg == "-h" || arg == "--help") {
             printUsage(argv[0]);
             return 0;
+        } else {
+            throw std::invalid_argument("Unknown option: " + arg);
         }
+    }
+
+    if (n_max < experiment_defaults::n_min) {
+        throw std::invalid_argument("-n must be at least " +
+                                    std::to_string(experiment_defaults::n_min));
     }
 
     std::vector<const AlgorithmSpec *> run_algos;
@@ -242,16 +217,21 @@ int main(int argc, char *argv[]) try
     // Rectangular regions: storage 12n x 30n, preparation 4n x 15n (n = n_min..n_max).
     // Derive seeds deterministically for each trial (see makeTrialEngine in noise.h).
     // Seeds depend on the physical parameters, but not execution order, method, or n_max.
-    const int n_min = experiment_defaults::n_min;
-    std::vector<Parameters> param_sets;
-    std::vector<int> param_scale;
-    for (double p_idle : {experiment_defaults::low_noise, experiment_defaults::high_noise}) {
-        if (high_noise_only && p_idle == 0.004) continue;
-        for (int n = n_min; n <= n_max; n++) {
-            Parameters p = makeScaledParameters(n, p_idle, p_idle,
-                                                num_iterations, num_trials);
-            param_sets.push_back(p);
-            param_scale.push_back(n);
+    struct NoiseCondition {
+        const char *label;
+        double p_idle;
+    };
+    std::vector<NoiseCondition> conditions;
+    if (!high_noise_only)
+        conditions.push_back({"Low noise", experiment_defaults::low_noise});
+    conditions.push_back({"High noise", experiment_defaults::high_noise});
+
+    std::vector<BenchmarkCase> cases;
+    for (const auto &cond : conditions) {
+        for (int n = experiment_defaults::n_min; n <= n_max; ++n) {
+            cases.push_back({cond.label, n,
+                             makeScaledParameters(n, cond.p_idle, cond.p_idle,
+                                                  num_iterations, num_trials)});
         }
     }
 
@@ -259,21 +239,20 @@ int main(int argc, char *argv[]) try
 
     for (const AlgorithmSpec *spec : run_algos) {
         const std::string a = spec->name;
-        std::string out = output_file.empty() ? ("results/results_" + a + ".json") : output_file;
+        const std::string out = output_file.empty() ? ("results/results_" + a + ".json") : output_file;
 
         std::cout << "\n=== " << a << " ===\n";
 
         std::vector<AlgoResult> rows;
-        bool is_proposed = (a == "proposed");
         // Skip larger n values after a planning call exhausts the cumulative budget.
-        std::map<double, bool> env_cut;
+        std::map<std::string, bool> env_cut;
 
-        for (size_t ci = 0; ci < param_sets.size(); ci++) {
-            const auto &p = param_sets[ci];
-            int n = param_scale[ci];
-            std::string env = (p.p_idle == 0.004) ? "Low noise" : "High noise";
+        for (const auto &item : cases) {
+            const auto &p = item.params;
+            const int n = item.n;
+            const std::string &env = item.environment;
 
-            if (env_cut[p.p_idle]) {
+            if (env_cut[env]) {
                 std::cout << "  " << env << " n=" << std::setw(2) << n
                           << " ... skipped (cutoff)\n";
                 continue;
@@ -284,7 +263,7 @@ int main(int argc, char *argv[]) try
 
             const auto run = runBenchmark(p, *spec,
                                           budget_ms_per_plan_call * num_trials * num_iterations);
-            env_cut[p.p_idle] = run.timed_out;
+            env_cut[env] = run.timed_out;
             std::vector<double> trial_rates, trial_times;
             for (const auto &trial : run.trials) {
                 trial_rates.push_back(trial.filling_rate);
@@ -310,17 +289,17 @@ int main(int argc, char *argv[]) try
             r.w            = p.w;
             r.m_r          = p.m_r;
             r.m_c          = p.m_c;
-            r.p_idle     = p.p_idle;
-            r.p_reload   = p.p_reload;
+            r.p_idle       = p.p_idle;
+            r.p_reload     = p.p_reload;
             r.filling_rate     = trials_done ? sum / trials_done : 0.0;
-            r.filling_rate_std = sampleStd(trial_rates);
+            r.filling_rate_std = experiment_utils::sampleStd(trial_rates);
             r.runtime_ms       = trials_done ? rt / trials_done : 0.0;
-            r.runtime_ms_std   = sampleStd(trial_times);
+            r.runtime_ms_std   = experiment_utils::sampleStd(trial_times);
             r.max_planning_wall_ms = max_planning;
-            r.per_op_planning_wall_ms_std = sampleStd(all_per_op_times);
+            r.per_op_planning_wall_ms_std = experiment_utils::sampleStd(all_per_op_times);
             r.trial_filling_rates = trial_rates;
             r.trial_runtimes_ms   = trial_times;
-            if (is_proposed && stats.hill_runs > 0)
+            if (spec->report_hill_climb_stats && stats.hill_runs > 0)
                 r.avg_convergence_iterations = static_cast<double>(stats.hill_iterations) / stats.hill_runs;
             if (stats.discarded_runs > 0)
                 r.avg_discarded_atoms = static_cast<double>(stats.discarded_atoms) / stats.discarded_runs;
@@ -340,7 +319,7 @@ int main(int argc, char *argv[]) try
                 std::cout << "  [HC convergence: " << r.avg_convergence_iterations
                           << " iters]";
             }
-            if (env_cut[p.p_idle]) {
+            if (env_cut[env]) {
                 std::cout << "  [TIMEOUT: cumulative plan budget="
                           << (budget_ms_per_plan_call * num_trials * num_iterations)
                           << " ms (" << budget_ms_per_plan_call << " ms/call x "
@@ -351,11 +330,11 @@ int main(int argc, char *argv[]) try
             }
             std::cout << "\n";
             // Save all results so far whenever an n completes or times out.
-            writeJson(out, a, seed_base, num_trials, num_iterations, budget_ms_per_plan_call, rows);
+            writeJson(out, *spec, seed_base, num_trials, num_iterations, budget_ms_per_plan_call, rows);
         }
 
         if (rows.empty())
-            writeJson(out, a, seed_base, num_trials, num_iterations, budget_ms_per_plan_call, rows);
+            writeJson(out, *spec, seed_base, num_trials, num_iterations, budget_ms_per_plan_call, rows);
     }
 
     return 0;
