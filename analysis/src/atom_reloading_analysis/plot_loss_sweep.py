@@ -75,10 +75,10 @@ def main() -> None:
         )
 
     ax.set_xlabel(r"Storage-loss probability $p_\mathrm{idle}$")
-    ax.set_ylabel(r"Filling rate $F$ (%)")
-    ax.set_xlim(-0.0005, 0.0205)
+    ax.set_ylabel("Filling rate (%)")
+    ax.set_xlim(0, 0.0205)
     # Keep the 100% curves visible just below the top border.
-    ax.set_ylim(96.95, 100.03)
+    ax.set_ylim(97, 100.03)
     ax.set_xticks([0, 0.004, 0.008, 0.012, 0.016, 0.020])
     ax.set_xticklabels(["0", "0.004", "0.008", "0.012", "0.016", "0.020"])
     ax.set_yticks([97, 98, 99, 100])
