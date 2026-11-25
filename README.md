@@ -43,6 +43,7 @@ defect-aware-parallel-atom-reloading/
 ├── results/                    # Experiment results in JSON format
 │   ├── results_*.json          # Benchmark results
 │   ├── proposed_f_{low,high}.json  # Raw data for F(t) plots
+│   ├── additional_row_by_row_20260927/   # Archived row-by-row comparator data
 │   └── independent_loss_sweep_20261108/  # Archived loss-probability sweep data
 ├── experiments/
 │   └── independent_loss_sweep/ # Driver and runner for the loss-probability sweep
@@ -53,6 +54,8 @@ defect-aware-parallel-atom-reloading/
 │   ├── pyproject.toml          # Dependencies and entry points
 │   ├── uv.lock                 # Pinned dependency versions
 │   ├── filling_rate_table.py   # Standalone LaTeX table wrapper (stdlib only)
+│   ├── additional_row_by_row_table.py  # Validate and format row-by-row results
+│   ├── tests/                  # Analysis compatibility and timeout tests
 │   └── src/atom_reloading_analysis/
 │       ├── environments.py     # Normalize current and historical noise labels
 │       ├── paths.py            # Locate results/ and figures/
@@ -185,11 +188,26 @@ incompatible timing scopes.
 # Evaluate all algorithms for n=1..15 (the range used in the paper; also the default)
 ./atom_reloading -n 15
 
-# Evaluate only the proposed method in the high-noise case
-./atom_reloading -a proposed -H -o results/results_proposed.json
+# Evaluate only the proposed method in the high-noise case (writing to a custom path)
+./atom_reloading -a proposed -H -o /tmp/results_proposed.json
+
+# Quick check across all algorithms up to n=1 without overwriting archived results/
+repo="$PWD" && mkdir -p /tmp/repro && (cd /tmp/repro && "$repo"/atom_reloading -n 1)
 ```
 
-Results are saved to `results/results_<algo>.json` by default.
+Results are saved to `results/results_<algo>.json` relative to the current working
+directory by default.
+
+**Preserving archived results & runtime expectations:** Running `./atom_reloading`
+or `make run` from the repository root overwrites the archived `results/results_*.json`
+files. To keep the archived data untouched, pass `-o <path>` for a single algorithm
+or run the binary from a separate working directory (as in the quick-check example
+above). Note also that while the heuristic methods (`baseline`, `greedy`,
+`simple_greedy`, `proposed`, `row_by_row`) finish quickly, exact MIP runs
+(`mip_scip`, `mip_glpk`) can run up to the full cumulative budget (1,000 s per
+noise condition at the default `-c 100`) before timing out at larger `n`. Start with
+a small `-n` (such as `-n 1` or `-n 3`) or a single method when doing a quick
+verification.
 
 ### Simple-Run Mode
 
@@ -236,12 +254,29 @@ The grid geometry is shared with benchmark mode through `makeScaledParameters()`
 ./atom_reloading_simple -n 30 -a 0 -p_idle 0.02 -p_reload 0.02
 
 # Regenerate raw data for the F(t) plots (results/proposed_f_*.json, n=15)
+# Use a different -o path if you want to keep the archived files untouched.
 ./atom_reloading_simple -n 15 -a 1 -i 100 -t 100 -o results/proposed_f_low.json
 ./atom_reloading_simple -n 15 -a 1 -i 100 -t 100 -p_idle 0.02 -p_reload 0.02 \
     -o results/proposed_f_high.json
 ```
 
 Results are saved to `execution_result.json` by default; use `-o` to change it.
+
+### Additional Row-by-Row Experiment
+
+The cyclic row-by-row comparator (`row_by_row`) is archived separately under
+`results/additional_row_by_row_20260927/` and is used for comparison tables rather
+than the main plots.
+
+```bash
+# Rerun the row-by-row benchmark without overwriting the archive
+./atom_reloading -a row_by_row -n 15 -o /tmp/results_row_by_row.json
+
+# Validate the JSON and generate the summary CSV and LaTeX table
+python3 analysis/additional_row_by_row_table.py \
+    results/additional_row_by_row_20260927/results_row_by_row.json \
+    --output-dir /tmp/row_by_row_out
+```
 
 ### Independent Loss-Probability Sweep
 
@@ -286,7 +321,19 @@ uv run plot-metrics        # filling_rate / runtime / max_planning_time / conver
 uv run plot-filling-rate   # filling_rate_vs_time (F(t) plot)
 uv run plot-loss-sweep     # independent_loss_sweep (independent loss-probability sweep)
 uv run trial-stats         # Per-trial statistics and Welch's t-tests
+uv run filling-rate-table --n 3  # Decimal-aligned LaTeX comparison table (stdout)
 ```
+
+### Artifact-to-Command Reproduction Map
+
+| Output artifact | Input data | Command |
+| --- | --- | --- |
+| `figures/filling_rate_{low,high}_noise.pdf`, `figures/runtime_{low,high}_noise.pdf`, `figures/max_planning_time_{low,high}_noise.pdf`, `figures/convergence_iterations.pdf` | `results/results_*.json` | `make figures` or `uv run --project analysis plot-metrics` |
+| `figures/filling_rate_vs_time.pdf` | `results/proposed_f_{low,high}.json` | `make figures` or `uv run --project analysis plot-filling-rate` |
+| `figures/independent_loss_sweep.pdf` (Fig. 7) | `results/independent_loss_sweep_20261108/{summary.json,trials.csv}` | `make figures` or `uv run --project analysis plot-loss-sweep` |
+| Per-trial summary and Welch's t-tests (stdout) | `results/results_*.json` | `make stats` or `uv run --project analysis trial-stats` |
+| Main comparison LaTeX table (stdout) | `results/results_*.json` (+ `results/additional_row_by_row_20260927/results_row_by_row.json` if present) | `python3 analysis/filling_rate_table.py --n 3` (stdlib only) or `uv run --project analysis filling-rate-table --n 3` |
+| Additional row-by-row CSV, LaTeX table, and `validation.json` | `results/additional_row_by_row_20260927/results_row_by_row.json` | `python3 analysis/additional_row_by_row_table.py <result.json> --output-dir <dir>` (stdlib only) |
 
 The locations of `results/` and `figures/` are resolved automatically, so commands
 work from any current directory once the package is installed. To override the
@@ -397,5 +444,9 @@ The independent loss-probability sweep in `results/independent_loss_sweep_202611
 was run in the development repository on 2026-11-08, after this repository was
 initialized, and records development commit
 `168d326019114516dde2f1c4ed6ff88332ceba79`. The SHA-256 hashes it records for all
-files under `src/` and `include/` match this repository's initial public release,
-and a rerun on that release reproduces its `trials.csv` byte for byte.
+files under `src/` and `include/` match this repository's initial public release
+(`v1.0.0`), and a rerun on that release reproduces both `trials.csv` and
+`source_sha256`. Subsequent code-cleanup commits change `source_sha256` and
+`commit`, while leaving the algorithms, noise model, and seed derivation unchanged,
+so reruns continue to reproduce the archived `trials.csv` byte for byte (as well
+as the deterministic filling-rate results in the benchmark and simple-run archives).
