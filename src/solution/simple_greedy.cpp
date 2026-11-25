@@ -1,16 +1,17 @@
-#include "../../include/algorithms.h"
-#include <vector>
+#include "algorithms.h"
+#include "planning_utils.h"
 #include <algorithm>
+#include <vector>
 
 // Simple Greedy method (ablation study).
 // Count vacancies independently in each row and column, then select the
 // top m_r rows and m_c columns. This naive greedy method does not account
 // for row/column interactions through incremental u/v updates as greedyMethod does.
-ReloadParams simpleGreedyMethod(const Grid &A, int /*t*/, int m_r, int m_c, double /*p_op*/)
+ReloadParams simpleGreedyMethod(const Grid &A, int /*t*/, int m_r, int m_c, double p_op)
 {
-    int h = A.size();
-    int w = A[0].size();
+    const auto [h, w] = planning_detail::dimensions(A, m_r, m_c, p_op);
     ReloadParams params;
+    if (h == 0 || w == 0 || m_r == 0 || m_c == 0) return params;
     std::set<int> &R = params.R;
     std::set<int> &C = params.C;
 

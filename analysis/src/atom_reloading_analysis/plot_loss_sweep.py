@@ -11,10 +11,6 @@ confidence interval.
 from __future__ import annotations
 
 import argparse
-import csv
-import json
-import math
-import statistics
 from pathlib import Path
 
 import matplotlib
@@ -23,8 +19,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
 from .paths import add_path_arguments, resolve_dirs  # noqa: E402
+from .results import SWEEP_DIR, load_and_verify_loss_sweep as load_and_verify  # noqa: E402
 
-SWEEP_DIR = "independent_loss_sweep_20261108"
 OUTPUT_NAME = "independent_loss_sweep.pdf"
 
 RCPARAMS = {
@@ -40,37 +36,6 @@ STYLES = (
     (0.004, "#1f77b4", "s", "--", r"$p_\mathrm{op}=0.004$"),
     (0.020, "#ff7f0e", "^", "-.", r"$p_\mathrm{op}=0.020$"),
 )
-
-
-def load_and_verify(sweep_dir: Path) -> list[dict]:
-    """Return the summary rows after checking them against the raw trials."""
-    summary = json.loads((sweep_dir / "summary.json").read_text())
-    with (sweep_dir / "trials.csv").open(newline="") as source:
-        rows = list(csv.DictReader(source))
-
-    groups: dict[tuple[float, float], list[dict]] = {}
-    for row in rows:
-        key = float(row["p_idle"]), float(row["p_op"])
-        groups.setdefault(key, []).append(row)
-    results = summary["results"]
-    if len(results) != len(groups):
-        raise ValueError("Raw trials and summary have different conditions")
-    for result in results:
-        group = groups[(result["p_idle"], result["p_op"])]
-        if len(group) != summary["trials"] or {
-            int(row["trial"]) for row in group
-        } != set(range(summary["trials"])):
-            raise ValueError("Incomplete or duplicate trial indices")
-        values = [float(row["filling_rate"]) for row in group]
-        if not all(0 <= value <= 1 for value in values):
-            raise ValueError("Filling rates must be between zero and one")
-        for recorded, calculated in (
-            (result["mean"], statistics.mean(values)),
-            (result["sample_sd"], statistics.stdev(values)),
-        ):
-            if not math.isclose(recorded, calculated, rel_tol=0, abs_tol=1e-12):
-                raise ValueError("Summary statistics disagree with raw trials")
-    return results
 
 
 def main() -> None:

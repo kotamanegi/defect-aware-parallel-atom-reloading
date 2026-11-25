@@ -3,6 +3,7 @@
 
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -O2 -I./include -I$(OBJ_DIR)
+DEPFLAGS = -MMD -MP
 # Both SCIP and GLPK libraries are required because both MIP implementations are built.
 LDFLAGS = -lscip -lglpk
 
@@ -52,10 +53,11 @@ $(GIT_COMMIT_HEADER): FORCE | $(OBJ_DIR)
 TARGET_TEST = $(OBJ_DIR)/tests/algorithms_test
 TARGET_BENCHMARK_TEST = $(OBJ_DIR)/tests/benchmark_runner_test
 .PHONY: test
-test: $(TARGET_TEST) $(TARGET_BENCHMARK_TEST) $(TARGET_BENCHMARK)
+test: $(TARGET_TEST) $(TARGET_BENCHMARK_TEST) $(TARGET_BENCHMARK) $(TARGET_SIMPLE)
 	./$(TARGET_TEST)
 	./$(TARGET_BENCHMARK_TEST)
 	python3 tests/benchmark_cli_test.py
+	python3 tests/analysis_test.py
 
 $(TARGET_TEST): tests/algorithms_test.cpp $(COMMON_OBJECTS) $(wildcard $(INC_DIR)/*.h)
 	mkdir -p $(dir $@)
@@ -80,12 +82,12 @@ $(TARGET_SIMPLE): $(SIMPLE_OBJECTS)
 # Compile object files.
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 	@echo "Compiling: $<"
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(DEPFLAGS) -c $< -o $@
 
 # Compile object files under src/solution.
 $(OBJ_SOLUTION_DIR)/%.o: $(SOLUTION_DIR)/%.cpp | $(OBJ_SOLUTION_DIR)
 	@echo "Compiling: $<"
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(DEPFLAGS) -c $< -o $@
 
 # Create the obj directory.
 $(OBJ_DIR):
@@ -161,16 +163,8 @@ help:
 	@echo "  analysis/ - Python analysis and plotting package (managed with uv)"
 
 # Dependencies
-# Rebuild all affected objects, including the registry and Greedy, after planning API changes.
-$(COMMON_OBJECTS) $(OBJ_DIR)/main.o $(OBJ_DIR)/simple_run.o: $(wildcard $(INC_DIR)/*.h)
+# Automatically tracked via -MMD -MP dependency files under $(OBJ_DIR).
+DEPS = $(COMMON_OBJECTS:.o=.d) $(OBJ_DIR)/main.d $(OBJ_DIR)/simple_run.d
+-include $(DEPS)
 # Embed the commit ID in JSON metadata for both benchmark and simple-run modes.
 $(OBJ_DIR)/main.o $(OBJ_DIR)/simple_run.o: $(GIT_COMMIT_HEADER)
-$(OBJ_DIR)/main.o: $(INC_DIR)/types.h $(INC_DIR)/simulator.h
-$(OBJ_DIR)/simple_run.o: $(INC_DIR)/types.h $(INC_DIR)/simulator.h
-$(OBJ_DIR)/types.o: $(INC_DIR)/types.h
-$(OBJ_DIR)/grid.o: $(INC_DIR)/grid.h $(INC_DIR)/types.h
-$(OBJ_SOLUTION_DIR)/baseline.o: $(INC_DIR)/algorithms.h $(INC_DIR)/types.h
-$(OBJ_SOLUTION_DIR)/proposed.o: $(INC_DIR)/algorithms.h $(INC_DIR)/types.h
-$(OBJ_SOLUTION_DIR)/mip_scip.o: $(INC_DIR)/algorithms.h $(INC_DIR)/types.h
-$(OBJ_SOLUTION_DIR)/mip_glpk.o: $(INC_DIR)/algorithms.h $(INC_DIR)/types.h
-$(OBJ_DIR)/simulator.o: $(INC_DIR)/simulator.h $(INC_DIR)/grid.h $(INC_DIR)/algorithms.h $(INC_DIR)/types.h

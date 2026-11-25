@@ -11,7 +11,6 @@ Reads results/results_*.json and writes to figures/:
 from __future__ import annotations
 
 import argparse
-import json
 from pathlib import Path
 
 import matplotlib
@@ -19,8 +18,13 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
-from .environments import normalize_environment  # noqa: E402
 from .paths import add_path_arguments, resolve_dirs  # noqa: E402
+from .results import (  # noqa: E402
+    load_completed_rows,
+    method_files,
+    resolve_timing as resolve_timing_for_files,
+    timing_class_of,
+)
 
 RCPARAMS = {
     "font.size": 12,
@@ -29,14 +33,9 @@ RCPARAMS = {
     "figure.dpi": 150,
 }
 
-FILES = {
-    "Baseline":       "results_baseline.json",
-    "Greedy":         "results_greedy.json",
-    "Simple greedy":  "results_simple_greedy.json",
-    "Proposed":       "results_proposed.json",
-    "MIP (SCIP)":     "results_mip_scip.json",
-    "MIP (GLPK)":     "results_mip_glpk.json",
-}
+FILES = method_files(
+    ("baseline", "greedy", "simple_greedy", "proposed", "mip_scip", "mip_glpk")
+)
 
 STYLE = {
     "Baseline":       dict(color="#7f7f7f", linestyle=":",  marker="x"),
@@ -63,56 +62,14 @@ TIMING_NOTE = {
 }
 
 
-def timing_class_of(d: dict) -> str:
-    if d.get("schema_version") == 4:
-        if (d.get("timing_clock") != "steady_clock_wall" or
-                d.get("runtime_time_scope") != "sum of plan calls per trial including burn-in"):
-            raise RuntimeError("Invalid timing metadata for schema_version=4.")
-        return "wall_plan"
-    if d.get("schema_version") in (2, 3) and "timing_clock" in d:
-        return "wall"
-    return "legacy"
-
-
-# Determine the timing method across result files; reject mixed methods to avoid combining
-# CPU time, wall time including simulator work, and planning-only wall time.
 def resolve_timing(results_dir: Path) -> str:
-    classes = set()
-    averaging = set()
-    for fname in FILES.values():
-        path = results_dir / fname
-        if not path.exists():
-            continue
-        with open(path) as f:
-            data = json.load(f)
-            classes.add(timing_class_of(data))
-            averaging.add((data.get("burn_in_operations", 10),
-                           data.get("baseline_index_policy", "legacy_zero_based_sites")))
-    if len(averaging) > 1:
-        raise RuntimeError("Results use incompatible burn-in or indexing conventions.")
-    if len(classes) > 1:
-        raise RuntimeError(
-            "Mixed timing methods or scopes (CPU time, simulator-inclusive, planning-only)."
-            " Use the same timing method and scope for all files in results/."
-        )
-    return classes.pop() if classes else "legacy"
+    return resolve_timing_for_files(results_dir, FILES.values())
 
 
 def load(results_dir: Path, fname: str, timing: str):
-    path = results_dir / fname
-    if not path.exists():
-        return {}
-    with open(path) as f:
-        d = json.load(f)
-    T = d["num_iterations"]
-    rows = {}
-    for r in d["results"]:
-        if r.get("status", "completed") != "completed":
-            continue
-        r["runtime_per_op_ms"] = r["runtime_ms"] / T
-        if "runtime_ms_std" in r:
-            r["runtime_per_op_ms_std"] = r["runtime_ms_std"] / T
-        r["environment"] = normalize_environment(r["environment"])
+    del timing
+    rows: dict[str, list[dict]] = {}
+    for r in load_completed_rows(results_dir / fname):
         rows.setdefault(r["environment"], []).append(r)
     for env in rows:
         rows[env].sort(key=lambda r: r["n"])

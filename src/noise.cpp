@@ -1,4 +1,4 @@
-#include "../include/noise.h"
+#include "noise.h"
 #include <cmath>
 #include <cstring>
 #include <limits>

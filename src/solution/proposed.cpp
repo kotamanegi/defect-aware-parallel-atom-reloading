@@ -1,5 +1,5 @@
-#include "../../include/algorithms.h"
-#include "../../include/planning_utils.h"
+#include "algorithms.h"
+#include "planning_utils.h"
 
 long double evaluateRC(const Grid &A, const std::set<int> &R,
                        const std::set<int> &C, double p_op)
@@ -118,11 +118,11 @@ std::pair<std::set<int>, std::set<int>> hillClimbing(
 }
 
 // Proposed uses a single Greedy initial solution and reuses Greedy's u/v
-// as initial hill-climbing scores (matching incremental updates in data.tex:679-680).
+// as initial hill-climbing scores, matching the paper's incremental updates.
 ReloadParams proposedMethod(const Grid &A, int t, int m_r, int m_c, double p_op)
 {
     std::vector<int> u, v;
     const auto initial = greedyMethodWithScores(A, t, m_r, m_c, p_op, u, v);
     auto [R, C] = hillClimbing(A, initial.R, initial.C, m_r, m_c, p_op, &u, &v);
-    return {std::move(R), std::move(C), {}};
+    return {std::move(R), std::move(C)};
 }

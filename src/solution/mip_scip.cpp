@@ -10,110 +10,136 @@
 // from the paper. Nonnegative coefficients (vacancy=1) enforce z = x*y at integer optima.
 // Find an optimal solution without a solver time limit or heuristic fallback.
 
-#include "../../include/algorithms.h"
+#include "algorithms.h"
+#include "planning_utils.h"
 #include <scip/scip.h>
 #include <scip/scipdefplugins.h>
-#include <vector>
-#include <set>
 #include <cstdio>
-#include <cstdlib>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
-static int s_bb_ok = 0;
-static int s_lp_fallback = 0;
+namespace {
+int s_bb_ok = 0;
 
-void resetMipStatsScip() { s_bb_ok = s_lp_fallback = 0; }
-void getMipStatsScip(int &bb_ok, int &lp_fallback)
+void checkScip(SCIP_RETCODE rc, const char *action)
 {
-    bb_ok = s_bb_ok;
-    lp_fallback = s_lp_fallback;
+    if (rc != SCIP_OKAY) {
+        throw std::runtime_error(std::string("SCIP: ") + action +
+                                 " failed (retcode=" + std::to_string(static_cast<int>(rc)) + ")");
+    }
 }
 
-ReloadParams mipMethodScip(const Grid &A, int t, int m_r, int m_c, double p_op)
+class ScipModel {
+public:
+    ScipModel()
+    {
+        checkScip(SCIPcreate(&scip_), "SCIPcreate");
+        checkScip(SCIPincludeDefaultPlugins(scip_), "SCIPincludeDefaultPlugins");
+        checkScip(SCIPcreateProbBasic(scip_, "reloading"), "SCIPcreateProbBasic");
+        checkScip(SCIPsetObjsense(scip_, SCIP_OBJSENSE_MAXIMIZE), "SCIPsetObjsense");
+        checkScip(SCIPsetIntParam(scip_, "display/verblevel", 0), "set display/verblevel");
+        checkScip(SCIPsetIntParam(scip_, "presolving/maxrounds", 0), "set presolving/maxrounds");
+    }
+
+    ~ScipModel()
+    {
+        if (scip_) {
+            for (SCIP_VAR *&var : owned_vars_) {
+                if (var) SCIPreleaseVar(scip_, &var);
+            }
+            SCIPfree(&scip_);
+        }
+    }
+
+    ScipModel(const ScipModel &) = delete;
+    ScipModel &operator=(const ScipModel &) = delete;
+
+    SCIP *get() const { return scip_; }
+
+    SCIP_VAR *addVar(const char *name, SCIP_Real lb, SCIP_Real ub,
+                     SCIP_Real obj, SCIP_VARTYPE type)
+    {
+        SCIP_VAR *var = nullptr;
+        checkScip(SCIPcreateVarBasic(scip_, &var, name, lb, ub, obj, type), "SCIPcreateVarBasic");
+        owned_vars_.push_back(var);
+        checkScip(SCIPaddVar(scip_, var), "SCIPaddVar");
+        return var;
+    }
+
+    void addLinearCons(const char *name, int nvars, SCIP_VAR **vars,
+                       SCIP_Real *vals, SCIP_Real lhs, SCIP_Real rhs)
+    {
+        SCIP_CONS *cons = nullptr;
+        checkScip(SCIPcreateConsBasicLinear(scip_, &cons, name, nvars, vars, vals, lhs, rhs),
+                  "SCIPcreateConsBasicLinear");
+        const SCIP_RETCODE add_rc = SCIPaddCons(scip_, cons);
+        const SCIP_RETCODE rel_rc = SCIPreleaseCons(scip_, &cons);
+        checkScip(add_rc, "SCIPaddCons");
+        checkScip(rel_rc, "SCIPreleaseCons");
+    }
+
+private:
+    SCIP *scip_ = nullptr;
+    std::vector<SCIP_VAR *> owned_vars_;
+};
+} // namespace
+
+void resetMipStatsScip() { s_bb_ok = 0; }
+int getMipSolvedCountScip() { return s_bb_ok; }
+
+ReloadParams mipMethodScip(const Grid &A, int /*t*/, int m_r, int m_c, double p_op)
 {
-    int h = A.size();
-    int w = A[0].size();
-
-    std::vector<std::pair<int, int>> empty_pos;
-    empty_pos.reserve(h * w / 4);
-    for (int r = 0; r < h; r++)
-        for (int c = 0; c < w; c++)
-            if (A[r][c] == 0)
-                empty_pos.push_back({r, c});
-    int ne = (int)empty_pos.size();
-
-    // A no-op is optimal when there are no vacancies or capacity is zero.
-    if (ne == 0 || m_r == 0 || m_c == 0)
+    const auto [h, w] = planning_detail::dimensions(A, m_r, m_c, p_op);
+    if (h == 0 || w == 0 || m_r == 0 || m_c == 0)
         return {};
 
-    SCIP *scip;
-    SCIPcreate(&scip);
-    SCIPincludeDefaultPlugins(scip);
-    SCIPcreateProbBasic(scip, "reloading");
-    SCIPsetObjsense(scip, SCIP_OBJSENSE_MAXIMIZE);
-    SCIPsetIntParam(scip, "display/verblevel", 0);
-    SCIPsetIntParam(scip, "presolving/maxrounds", 0);
+    const auto empty_pos = planning_detail::collectVacancies(A);
+    const int ne = static_cast<int>(empty_pos.size());
+    // A no-op is optimal when there are no vacancies.
+    if (ne == 0)
+        return {};
+
+    ScipModel model;
+    SCIP *scip = model.get();
+    const SCIP_Real inf = SCIPinfinity(scip);
 
     std::vector<SCIP_VAR *> x_vars(h), y_vars(w), z_vars(ne), mu_vars(m_c + 1), xi_vars(m_c + 1);
     char name[64];
 
-    for (int r = 0; r < h; r++)
-    {
+    for (int r = 0; r < h; ++r) {
         std::snprintf(name, sizeof(name), "x%d", r);
-        SCIPcreateVarBasic(scip, &x_vars[r], name, 0.0, 1.0, 0.0,
-                           SCIP_VARTYPE_BINARY);
-        SCIPaddVar(scip, x_vars[r]);
+        x_vars[r] = model.addVar(name, 0.0, 1.0, 0.0, SCIP_VARTYPE_BINARY);
     }
-    for (int c = 0; c < w; c++)
-    {
+    for (int c = 0; c < w; ++c) {
         std::snprintf(name, sizeof(name), "y%d", c);
-        SCIPcreateVarBasic(scip, &y_vars[c], name, 0.0, 1.0, 0.0,
-                           SCIP_VARTYPE_BINARY);
-        SCIPaddVar(scip, y_vars[c]);
+        y_vars[c] = model.addVar(name, 0.0, 1.0, 0.0, SCIP_VARTYPE_BINARY);
     }
-    for (int k = 0; k < ne; k++)
-    {
+    for (int k = 0; k < ne; ++k) {
         std::snprintf(name, sizeof(name), "z%d", k);
-        SCIPcreateVarBasic(scip, &z_vars[k], name, 0.0, 1.0, 1.0,
-                           SCIP_VARTYPE_CONTINUOUS);
-        SCIPaddVar(scip, z_vars[k]);
+        z_vars[k] = model.addVar(name, 0.0, 1.0, 1.0, SCIP_VARTYPE_CONTINUOUS);
     }
 
     {
-        SCIP_CONS *cons;
         std::vector<SCIP_Real> coefs_x(h, 1.0);
         std::vector<SCIP_Real> coefs_y(w, 1.0);
-
-        SCIPcreateConsBasicLinear(scip, &cons, "sum_x", h, x_vars.data(),
-                                  coefs_x.data(), -SCIPinfinity(scip), (SCIP_Real)m_r);
-        SCIPaddCons(scip, cons);
-        SCIPreleaseCons(scip, &cons);
-
-        SCIPcreateConsBasicLinear(scip, &cons, "sum_y", w, y_vars.data(),
-                                  coefs_y.data(), -SCIPinfinity(scip), (SCIP_Real)m_c);
-        SCIPaddCons(scip, cons);
-        SCIPreleaseCons(scip, &cons);
+        model.addLinearCons("sum_x", h, x_vars.data(), coefs_x.data(), -inf, static_cast<SCIP_Real>(m_r));
+        model.addLinearCons("sum_y", w, y_vars.data(), coefs_y.data(), -inf, static_cast<SCIP_Real>(m_c));
     }
 
-    for (int b = 0; b <= m_c; ++b)
-    {
+    for (int b = 0; b <= m_c; ++b) {
         std::snprintf(name, sizeof(name), "mu%d", b);
-        SCIPcreateVarBasic(scip, &mu_vars[b], name, 0.0, 1.0, 0.0,
-                           SCIP_VARTYPE_BINARY);
-        SCIPaddVar(scip, mu_vars[b]);
+        mu_vars[b] = model.addVar(name, 0.0, 1.0, 0.0, SCIP_VARTYPE_BINARY);
         std::snprintf(name, sizeof(name), "xi%d", b);
-        SCIPcreateVarBasic(scip, &xi_vars[b], name, 0.0, SCIPinfinity(scip),
-                           -p_op * b, SCIP_VARTYPE_CONTINUOUS);
-        SCIPaddVar(scip, xi_vars[b]);
+        xi_vars[b] = model.addVar(name, 0.0, inf, -p_op * b, SCIP_VARTYPE_CONTINUOUS);
     }
+
     auto addEquality = [&](const char *label, std::vector<SCIP_VAR *> vars,
                            std::vector<SCIP_Real> coefs, double rhs) {
-        SCIP_CONS *cons;
-        SCIPcreateConsBasicLinear(scip, &cons, label, vars.size(), vars.data(),
-                                  coefs.data(), rhs, rhs);
-        SCIPaddCons(scip, cons);
-        SCIPreleaseCons(scip, &cons);
+        model.addLinearCons(label, static_cast<int>(vars.size()), vars.data(), coefs.data(), rhs, rhs);
     };
     addEquality("one_hot", mu_vars, std::vector<SCIP_Real>(m_c + 1, 1.0), 1.0);
+
     std::vector<SCIP_VAR *> vars = y_vars;
     std::vector<SCIP_Real> coefs(w, 1.0);
     for (int b = 1; b <= m_c; ++b) {
@@ -121,6 +147,7 @@ ReloadParams mipMethodScip(const Grid &A, int t, int m_r, int m_c, double p_op)
         coefs.push_back(-b);
     }
     addEquality("column_count", vars, coefs, 0.0);
+
     vars = x_vars;
     coefs.assign(h, -1.0);
     for (int b = 0; b <= m_c; ++b) {
@@ -128,88 +155,51 @@ ReloadParams mipMethodScip(const Grid &A, int t, int m_r, int m_c, double p_op)
         coefs.push_back(1.0);
     }
     addEquality("row_count", vars, coefs, 0.0);
+
     for (int b = 0; b <= m_c; ++b) {
         SCIP_VAR *bound_vars[] = {xi_vars[b], mu_vars[b]};
         SCIP_Real bound_coefs[] = {1.0, -static_cast<double>(m_r)};
-        SCIP_CONS *cons;
         std::snprintf(name, sizeof(name), "xi_bound%d", b);
-        SCIPcreateConsBasicLinear(scip, &cons, name, 2, bound_vars, bound_coefs,
-                                  -SCIPinfinity(scip), 0.0);
-        SCIPaddCons(scip, cons);
-        SCIPreleaseCons(scip, &cons);
+        model.addLinearCons(name, 2, bound_vars, bound_coefs, -inf, 0.0);
     }
 
-    for (int k = 0; k < ne; k++)
-    {
-        int r = empty_pos[k].first;
-        int c = empty_pos[k].second;
+    for (int k = 0; k < ne; ++k) {
+        const int r = empty_pos[k].first;
+        const int c = empty_pos[k].second;
 
-        {
-            SCIP_VAR *vars[2] = {z_vars[k], x_vars[r]};
-            SCIP_Real vals[2] = {1.0, -1.0};
-            SCIP_CONS *cons;
-            std::snprintf(name, sizeof(name), "zr%d_%d", r, k);
-            SCIPcreateConsBasicLinear(scip, &cons, name, 2, vars, vals,
-                                      -SCIPinfinity(scip), 0.0);
-            SCIPaddCons(scip, cons);
-            SCIPreleaseCons(scip, &cons);
-        }
-        {
-            SCIP_VAR *vars[2] = {z_vars[k], y_vars[c]};
-            SCIP_Real vals[2] = {1.0, -1.0};
-            SCIP_CONS *cons;
-            std::snprintf(name, sizeof(name), "zc%d_%d", c, k);
-            SCIPcreateConsBasicLinear(scip, &cons, name, 2, vars, vals,
-                                      -SCIPinfinity(scip), 0.0);
-            SCIPaddCons(scip, cons);
-            SCIPreleaseCons(scip, &cons);
-        }
-        {
-            SCIP_VAR *vars[3] = {x_vars[r], y_vars[c], z_vars[k]};
-            SCIP_Real vals[3] = {1.0, 1.0, -1.0};
-            SCIP_CONS *cons;
-            std::snprintf(name, sizeof(name), "zl%d_%d_%d", r, c, k);
-            SCIPcreateConsBasicLinear(scip, &cons, name, 3, vars, vals,
-                                      -SCIPinfinity(scip), 1.0);
-            SCIPaddCons(scip, cons);
-            SCIPreleaseCons(scip, &cons);
-        }
+        SCIP_VAR *zr_vars[2] = {z_vars[k], x_vars[r]};
+        SCIP_Real zr_vals[2] = {1.0, -1.0};
+        std::snprintf(name, sizeof(name), "zr%d_%d", r, k);
+        model.addLinearCons(name, 2, zr_vars, zr_vals, -inf, 0.0);
+
+        SCIP_VAR *zc_vars[2] = {z_vars[k], y_vars[c]};
+        SCIP_Real zc_vals[2] = {1.0, -1.0};
+        std::snprintf(name, sizeof(name), "zc%d_%d", c, k);
+        model.addLinearCons(name, 2, zc_vars, zc_vals, -inf, 0.0);
+
+        SCIP_VAR *zl_vars[3] = {x_vars[r], y_vars[c], z_vars[k]};
+        SCIP_Real zl_vals[3] = {1.0, 1.0, -1.0};
+        std::snprintf(name, sizeof(name), "zl%d_%d_%d", r, c, k);
+        model.addLinearCons(name, 3, zl_vars, zl_vals, -inf, 1.0);
     }
 
     // Solve exactly with no solver time limit.
-    SCIPsolve(scip);
+    checkScip(SCIPsolve(scip), "SCIPsolve");
 
-    if (SCIPgetStatus(scip) != SCIP_STATUS_OPTIMAL)
-    {
-        std::fprintf(stderr, "SCIP: B&B failed (status=%d)\n",
-                     (int)SCIPgetStatus(scip));
-        std::exit(1);
+    if (SCIPgetStatus(scip) != SCIP_STATUS_OPTIMAL) {
+        throw std::runtime_error("SCIP: B&B failed (status=" +
+                                 std::to_string(static_cast<int>(SCIPgetStatus(scip))) + ")");
     }
 
     SCIP_SOL *sol = SCIPgetBestSol(scip);
     ReloadParams params;
-    for (int r = 0; r < h; r++)
+    for (int r = 0; r < h; ++r)
         if (SCIPgetSolVal(scip, sol, x_vars[r]) > 0.5)
             params.R.insert(r);
-    for (int c = 0; c < w; c++)
+    for (int c = 0; c < w; ++c)
         if (SCIPgetSolVal(scip, sol, y_vars[c]) > 0.5)
             params.C.insert(c);
     ++s_bb_ok;
 
-    for (int r = 0; r < h; r++)
-        SCIPreleaseVar(scip, &x_vars[r]);
-    for (int c = 0; c < w; c++)
-        SCIPreleaseVar(scip, &y_vars[c]);
-    for (int k = 0; k < ne; k++)
-        SCIPreleaseVar(scip, &z_vars[k]);
-
-    for (int b = 0; b <= m_c; ++b) {
-        SCIPreleaseVar(scip, &mu_vars[b]);
-        SCIPreleaseVar(scip, &xi_vars[b]);
-    }
-
-    SCIPfree(&scip);
-
-    (void)t;
     return params;
 }

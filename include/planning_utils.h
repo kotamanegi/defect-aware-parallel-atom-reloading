@@ -8,19 +8,40 @@
 
 namespace planning_detail {
 
-// Input validation for Greedy and local search; zero capacity and empty grids allow a no-op.
-inline std::pair<int, int> dimensions(const Grid &A, int m_r, int m_c, double p_op)
+// Validate that A is rectangular and return {height, width}; empty grids return {0, 0}.
+inline std::pair<int, int> gridDimensions(const Grid &A)
 {
     const int h = static_cast<int>(A.size());
     const int w = h == 0 ? 0 : static_cast<int>(A.front().size());
     for (const auto &row : A)
         if (static_cast<int>(row.size()) != w)
             throw std::invalid_argument("planning requires a rectangular grid");
+    return {h, w};
+}
+
+// Input validation for capacity-constrained planners; zero capacity and empty grids allow a no-op.
+inline std::pair<int, int> dimensions(const Grid &A, int m_r, int m_c, double p_op)
+{
+    const auto [h, w] = gridDimensions(A);
     if (m_r < 0 || m_r > h || m_c < 0 || m_c > w)
         throw std::invalid_argument("planning capacity is outside the grid");
     if (!std::isfinite(p_op) || p_op < 0 || p_op > 1)
         throw std::invalid_argument("p_op must be in [0, 1]");
     return {h, w};
+}
+
+// Enumerate all vacant site coordinates (r, c) where A[r][c] == 0.
+inline std::vector<std::pair<int, int>> collectVacancies(const Grid &A)
+{
+    const int h = static_cast<int>(A.size());
+    const int w = h == 0 ? 0 : static_cast<int>(A.front().size());
+    std::vector<std::pair<int, int>> empty_pos;
+    empty_pos.reserve(static_cast<size_t>(h * w / 4));
+    for (int r = 0; r < h; ++r)
+        for (int c = 0; c < w; ++c)
+            if (A[r][c] == 0)
+                empty_pos.push_back({r, c});
+    return empty_pos;
 }
 
 // Ascending traversal with an end hint builds sets in O(n); use arrays for membership during search.

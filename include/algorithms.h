@@ -2,6 +2,7 @@
 #define ALGORITHMS_H
 
 #include "types.h"
+#include <iosfwd>
 #include <string>
 #include <utility>
 #include <vector>
@@ -26,7 +27,7 @@ ReloadParams greedyMethod(const Grid &A, int t, int m_r, int m_c, double p_op);
 
 // Construct the same solution as greedyMethod and write the full u/v vectors for filtered (R,C)
 // to out_u / out_v: u_r = sum_{j in C}(1-X_{r,j}), v_c = sum_{i in R}(1-X_{i,c}).
-// Update unfiltered u/v incrementally in O(Hp Ws + Wp Hs), as in data.tex:679-680.
+// Update unfiltered u/v incrementally in O(m_r * w + m_c * h), matching the paper.
 ReloadParams greedyMethodWithScores(const Grid &A, int t, int m_r, int m_c, double p_op,
                                     std::vector<int> &out_u, std::vector<int> &out_v);
 
@@ -71,9 +72,14 @@ struct AlgorithmSpec
     ReloadParams (*plan)(const Grid &A, int t, int m_r, int m_c, double p_op);
 
     // Statistics hooks for MIP methods only; nullptr for other methods.
-    // Count branch-and-bound successes and LP fallbacks separately for each solver.
+    // Count solved branch-and-bound instances separately for each solver.
     void (*reset_mip_stats)() = nullptr;
-    void (*get_mip_stats)(int &bb_ok, int &lp_fallback) = nullptr;
+    int (*get_mip_solved_count)() = nullptr;
+
+    // Benchmark reporting options for method-specific metadata and precision.
+    bool report_hill_climb_stats = false;
+    int json_precision = 6;
+    void (*write_extra_json_metadata)(std::ostream &out) = nullptr;
 };
 
 // All registered methods, sorted by ascending ID.
@@ -83,11 +89,11 @@ const std::vector<AlgorithmSpec> &algorithms();
 const AlgorithmSpec *findAlgorithmByName(const std::string &name);
 const AlgorithmSpec *findAlgorithmById(int id);
 
-// Get/reset branch-and-bound successes and LP fallbacks, independently for each solver.
+// Get/reset solved branch-and-bound counts, independently for each solver.
 // Normally called through the statistics hooks in AlgorithmSpec.
-void getMipStatsScip(int &bb_ok, int &lp_fallback);
+int getMipSolvedCountScip();
 void resetMipStatsScip();
-void getMipStatsGlpk(int &bb_ok, int &lp_fallback);
+int getMipSolvedCountGlpk();
 void resetMipStatsGlpk();
 
 // Get/reset hill-climbing convergence statistics (total iterations and run count).

@@ -6,44 +6,29 @@ Reads results/results_*.json.
 from __future__ import annotations
 
 import argparse
-import json
 import math
 from pathlib import Path
 
 from scipy import stats
 
-from .environments import normalize_environment
 from .paths import add_path_arguments, resolve_dirs
+from .results import load_completed_rows, method_files
 
-FILES = {
-    "Baseline":      "results_baseline.json",
-    "Greedy":        "results_greedy.json",
-    "Simple Greedy": "results_simple_greedy.json",
-    "Proposed":      "results_proposed.json",
-    "MIP (SCIP)":    "results_mip_scip.json",
-}
+FILES = method_files(("baseline", "greedy", "simple_greedy", "proposed", "mip_scip"))
 
 PAIRS = [
     ("Proposed", "Greedy"),
     ("Proposed", "Baseline"),
-    ("Proposed", "Simple Greedy"),
+    ("Proposed", "Simple greedy"),
     ("MIP (SCIP)", "Proposed"),
 ]
 
 
 def load(results_dir: Path, fname: str):
-    path = results_dir / fname
-    if not path.exists():
-        return {}
-    with open(path) as f:
-        d = json.load(f)
-    rows = {}
-    for r in d["results"]:
-        if r.get("status", "completed") != "completed":
-            continue
-        r["environment"] = normalize_environment(r["environment"])
-        rows[(r["environment"], r["n"])] = r
-    return rows
+    return {
+        (r["environment"], r["n"]): r
+        for r in load_completed_rows(results_dir / fname)
+    }
 
 
 def ci95(xs):

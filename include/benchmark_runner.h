@@ -11,7 +11,7 @@ struct TrialSummary {
     double runtime_ms = 0.0; // Total wall time of all planning calls in this trial (ms).
     long long hill_iterations = 0, hill_runs = 0;
     long long discarded_atoms = 0, discarded_runs = 0;
-    int mip_ok = 0, mip_fallback = 0;
+    int mip_solved = 0;
 };
 
 struct BenchmarkRun {

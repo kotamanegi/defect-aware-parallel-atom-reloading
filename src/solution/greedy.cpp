@@ -1,10 +1,10 @@
-#include "../../include/algorithms.h"
-#include "../../include/planning_utils.h"
+#include "algorithms.h"
+#include "planning_utils.h"
 
 // Greedy from the paper: choose the axis by the ratio, then rank by (partial vacancies, total vacancies).
 // Finally, remove rows and columns covering no vacancies in the same unfiltered (R,C).
 // greedyMethod is the five-argument registry entry. Proposed also needs u/v,
-// so it uses greedyMethodWithScores (matching incremental updates in data.tex:679-680).
+// so it uses greedyMethodWithScores to reuse the incremental u/v scores.
 ReloadParams greedyMethod(const Grid &A, int t, int m_r, int m_c, double p_op)
 {
     std::vector<int> u, v;
@@ -78,5 +78,5 @@ ReloadParams greedyMethodWithScores(const Grid &A, int /*t*/, int m_r, int m_c,
         for (int c = 0; c < w; ++c) v[c] -= 1 - A[i][c];
     out_u = std::move(u);
     out_v = std::move(v);
-    return {planning_detail::indices(rows), planning_detail::indices(cols), {}};
+    return {planning_detail::indices(rows), planning_detail::indices(cols)};
 }

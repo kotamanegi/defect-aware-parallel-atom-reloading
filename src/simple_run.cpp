@@ -1,14 +1,17 @@
-#include <iostream>
-#include <vector>
-#include <iomanip>
 #include <cmath>
+#include <cstdint>
 #include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <numeric>
+#include <stdexcept>
 #include <string>
-#include <filesystem>
-#include "../include/types.h"
-#include "../include/simulator.h"
-#include "../include/algorithms.h"
-#include "../include/experiment_metadata.h"
+#include <vector>
+#include "types.h"
+#include "simulator.h"
+#include "algorithms.h"
+#include "experiment_metadata.h"
+#include "experiment_utils.h"
 
 // Join registered methods as "0:Baseline, 1:Proposed, ..." for help output.
 static std::string algorithmChoiceList()
@@ -21,91 +24,83 @@ static std::string algorithmChoiceList()
     return s;
 }
 
-int main(int argc, char *argv[])
+static void printUsage(const char *prog)
+{
+    std::cout << "Usage: " << prog << " [options]\n";
+    std::cout << "Options:\n";
+    std::cout << "  -n <value>    Scale factor n; storage 12n x 30n, preparation 4n x 15n (default: "
+              << experiment_defaults::simple_n << ")\n";
+    std::cout << "  -a <value>    Algorithm (" << algorithmChoiceList() << ") (default: 1)\n";
+    std::cout << "  -p_idle <value>   Environmental noise probability (default: "
+              << experiment_defaults::low_noise << ")\n";
+    std::cout << "  -p_reload <value> Transport failure probability during reloading (default: "
+              << experiment_defaults::low_noise << ")\n";
+    std::cout << "  -i <value>    Number of iterations (default: " << experiment_defaults::iterations << ")\n";
+    std::cout << "  -t, --trials <value>  Number of trials (default: " << experiment_defaults::trials << ")\n";
+    std::cout << "  -s, --seed <value>    Base random seed (default: " << experiment_defaults::seed_base << ")\n";
+    std::cout << "  -o, --output <path> Output JSON file (default: execution_result.json)\n";
+    std::cout << "  -h, --help Show help\n";
+}
+
+int main(int argc, char *argv[]) try
 {
     // Set command-line defaults.
-    int n = experiment_defaults::simple_n; // Default scale factor (the paper's simple-run experiment uses n=30).
-    int algorithm = 1; // Default to Proposed; see the registry for all algorithm IDs.
-    double p_idle = 0.004;   // Default for the low-noise case.
-    double p_reload = 0.004; // Default matches p_idle.
+    int n = experiment_defaults::simple_n; // Default scale factor (n=15).
+    int algorithm = 1;                     // Default to Proposed; see the registry for all algorithm IDs.
+    double p_idle = experiment_defaults::low_noise;
+    double p_reload = experiment_defaults::low_noise;
     int num_iterations = experiment_defaults::iterations; // Total operations T=100, as in the paper.
-    int num_trials = experiment_defaults::trials;    // Number of trials to average.
-    int seed_base = experiment_defaults::seed_base;
+    int num_trials = experiment_defaults::trials;         // Number of trials to average.
+    std::uint64_t seed_base = experiment_defaults::seed_base;
     std::string output_file = "execution_result.json";
 
     // Parse command-line arguments.
-    for (int i = 1; i < argc; i++)
-    {
-        std::string arg = argv[i];
-        if (arg == "-n" && i + 1 < argc)
-        {
-            n = std::atoi(argv[++i]);
-        }
-        else if (arg == "-a" && i + 1 < argc)
-        {
-            algorithm = std::atoi(argv[++i]);
-        }
-        else if (arg == "-p_idle" && i + 1 < argc)
-        {
-            p_idle = std::atof(argv[++i]);
-        }
-        else if (arg == "-p_reload" && i + 1 < argc)
-        {
-            p_reload = std::atof(argv[++i]);
-        }
-        else if (arg == "-i" && i + 1 < argc)
-        {
-            num_iterations = std::atoi(argv[++i]);
-        }
-        else if ((arg == "-t" || arg == "--trials") && i + 1 < argc)
-        {
-            num_trials = std::atoi(argv[++i]);
-            if (num_trials < 1) num_trials = 1;
-        }
-        else if ((arg == "-s" || arg == "--seed") && i + 1 < argc)
-        {
-            seed_base = std::atoi(argv[++i]);
-        }
-        else if ((arg == "-o" || arg == "--output") && i + 1 < argc)
-        {
-            output_file = argv[++i];
-        }
-        else if (arg == "-h" || arg == "--help")
-        {
-            std::cout << "Usage: " << argv[0] << " [options]\n";
-            std::cout << "Options:\n";
-            std::cout << "  -n <value>    Scale factor n; storage 12n x 30n, preparation 4n x 15n (default: 15)\n";
-            std::cout << "  -a <value>    Algorithm (" << algorithmChoiceList() << ") (default: 1)\n";
-            std::cout << "  -p_idle <value>   Environmental noise probability (default: 0.004)\n";
-            std::cout << "  -p_reload <value> Transport failure probability during reloading (default: 0.004)\n";
-            std::cout << "  -i <value>    Number of iterations (default: " << experiment_defaults::iterations << ")\n";
-            std::cout << "  -t, --trials <value>  Number of trials (default: 100)\n";
-            std::cout << "  -s, --seed <value>    Base random seed (default: 998244353)\n";
-            std::cout << "  -o, --output <path> Output JSON file (default: execution_result.json)\n";
-            std::cout << "  -h, --help Show help\n";
+    for (int i = 1; i < argc; ++i) {
+        const std::string arg = argv[i];
+        if (arg == "-n") {
+            n = experiment_utils::parseIntArg(arg, experiment_utils::requireArgValue(i, argc, argv, arg));
+        } else if (arg == "-a") {
+            algorithm = experiment_utils::parseIntArg(arg, experiment_utils::requireArgValue(i, argc, argv, arg));
+        } else if (arg == "-p_idle") {
+            p_idle = experiment_utils::parseProbabilityArg(arg, experiment_utils::requireArgValue(i, argc, argv, arg));
+        } else if (arg == "-p_reload") {
+            p_reload = experiment_utils::parseProbabilityArg(arg, experiment_utils::requireArgValue(i, argc, argv, arg));
+        } else if (arg == "-i") {
+            num_iterations = experiment_utils::parseIntArg(arg, experiment_utils::requireArgValue(i, argc, argv, arg));
+        } else if (arg == "-t" || arg == "--trials") {
+            num_trials = experiment_utils::parseIntArg(arg, experiment_utils::requireArgValue(i, argc, argv, arg));
+        } else if (arg == "-s" || arg == "--seed") {
+            seed_base = experiment_utils::parseUint64Arg(arg, experiment_utils::requireArgValue(i, argc, argv, arg));
+        } else if (arg == "-o" || arg == "--output") {
+            output_file = experiment_utils::requireArgValue(i, argc, argv, arg);
+        } else if (arg == "-h" || arg == "--help") {
+            printUsage(argv[0]);
             return 0;
+        } else {
+            throw std::invalid_argument("Unknown option: " + arg);
         }
     }
 
+    if (n < experiment_defaults::n_min) {
+        throw std::invalid_argument("-n must be at least " +
+                                    std::to_string(experiment_defaults::n_min));
+    }
     if (num_iterations <= experiment_defaults::burn_in || num_trials <= 0) {
-        std::cerr << "Error: The number of operations must exceed " << experiment_defaults::burn_in
-                  << ", and the number of trials must be at least 1.\n";
-        return 1;
+        throw std::invalid_argument(
+            "The number of operations must exceed " + std::to_string(experiment_defaults::burn_in) +
+            ", and the number of trials must be at least 1.");
     }
 
     // Set parameters using the geometry shared with benchmark mode (main.cpp).
     // The simulator runs one trial; the outer loop handles multiple trials.
     // Derive seeds deterministically from each trial_index (see noise.h).
     Parameters p = makeScaledParameters(n, p_idle, p_reload, num_iterations, 1);
-    p.seed_base = static_cast<std::uint64_t>(seed_base);
+    p.seed_base = seed_base;
 
     // Resolve the algorithm through the registry.
     const AlgorithmSpec *spec = findAlgorithmById(algorithm);
     if (spec == nullptr)
-    {
-        std::cerr << "Error: Invalid algorithm ID: " << algorithm << "\n";
-        return 1;
-    }
+        throw std::invalid_argument("Invalid algorithm ID: " + std::to_string(algorithm));
     const std::string algorithm_name = spec->display_name;
 
     std::cout << std::fixed << std::setprecision(4);
@@ -127,7 +122,7 @@ int main(int argc, char *argv[])
     std::vector<std::vector<double>> trial_rates;
     trial_rates.reserve(num_trials);
     std::vector<double> trial_avg(num_trials, 0.0);
-    for (int trial = 0; trial < num_trials; trial++) {
+    for (int trial = 0; trial < num_trials; ++trial) {
         Parameters trial_p = p;
         trial_p.trial_index = static_cast<std::uint64_t>(trial);
         std::vector<double> per_iter;
@@ -147,45 +142,28 @@ int main(int argc, char *argv[])
     const size_t T = trial_rates[0].size();
     std::vector<double> mean_per_iter(T, 0.0);
     std::vector<double> std_per_iter(T, 0.0);
-    for (size_t i = 0; i < T; i++) {
+    std::vector<double> column(num_trials, 0.0);
+    for (size_t i = 0; i < T; ++i) {
         double sum = 0.0;
-        for (int trial = 0; trial < num_trials; trial++) {
-            sum += trial_rates[trial][i];
+        for (int trial = 0; trial < num_trials; ++trial) {
+            column[trial] = trial_rates[trial][i];
+            sum += column[trial];
         }
         mean_per_iter[i] = sum / num_trials;
+        std_per_iter[i] = experiment_utils::sampleStd(column);
     }
-    // Compute the overall mean.
-    double sum_avg = 0.0;
-    for (int trial = 0; trial < num_trials; trial++) sum_avg += trial_avg[trial];
-    double mean_avg_overall = sum_avg / num_trials;
+    const double mean_avg_overall =
+        std::accumulate(trial_avg.begin(), trial_avg.end(), 0.0) / num_trials;
 
-    // Sample standard deviation (divide by n-1).
-    if (num_trials > 1) {
-        for (size_t i = 0; i < T; i++) {
-            double sq = 0.0;
-            for (int trial = 0; trial < num_trials; trial++) {
-                double d = trial_rates[trial][i] - mean_per_iter[i];
-                sq += d * d;
-            }
-            std_per_iter[i] = std::sqrt(sq / (num_trials - 1));
-        }
-    }
-
-    std::cout << "Average filling rate (mean over trials): " << (mean_avg_overall * 100) << "%\n";
+    std::cout << "Average filling rate (mean over trials): " << (mean_avg_overall * 100.0) << "%\n";
 
     // Write JSON output.
-    // Create the output directory (e.g. results/) if needed.
-    std::filesystem::path out_path(output_file);
-    if (out_path.has_parent_path()) {
-        std::error_code ec;
-        std::filesystem::create_directories(out_path.parent_path(), ec);
-    }
+    experiment_utils::ensureParentDirectory(output_file);
 
     std::ofstream json_file(output_file);
-    if (!json_file.is_open()) {
-        std::cerr << "Failed to create JSON file: " << output_file << "\n";
-        return 1;
-    }
+    if (!json_file.is_open())
+        throw std::runtime_error("Failed to create JSON file: " + output_file);
+
     json_file << std::fixed << std::setprecision(6);
     json_file << "{\n";
     json_file << "  \"parameters\": {\n";
@@ -207,7 +185,7 @@ int main(int argc, char *argv[])
     json_file << "  \"average_filling_rate\": " << mean_avg_overall << ",\n";
     writeExperimentMetadata(json_file, num_trials);
     json_file << "  \"iterations\": [\n";
-    for (size_t i = 0; i < T; i++) {
+    for (size_t i = 0; i < T; ++i) {
         json_file << "    {\n";
         json_file << "      \"iteration\": " << (i + 1) << ",\n";
         json_file << "      \"filling_rate\": " << mean_per_iter[i] << ",\n";
@@ -222,4 +200,9 @@ int main(int argc, char *argv[])
     std::cout << "\nResults saved to " << output_file << ".\n";
 
     return 0;
+}
+catch (const std::exception &error)
+{
+    std::cerr << "Error: " << error.what() << "\n";
+    return 1;
 }

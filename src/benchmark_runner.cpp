@@ -1,5 +1,5 @@
-#include "../include/benchmark_runner.h"
-#include "../include/timing.h"
+#include "benchmark_runner.h"
+#include "timing.h"
 #include <cerrno>
 #include <cmath>
 #include <cstdio>
@@ -240,7 +240,7 @@ BenchmarkRun runBenchmark(const Parameters &p, const AlgorithmSpec &spec, double
             summary.runtime_ms = std::accumulate(plan_times.begin(), plan_times.end(), 0.0);
             getHillClimbStats(summary.hill_iterations, summary.hill_runs);
             getDiscardedStats(summary.discarded_atoms, summary.discarded_runs);
-            if (spec.get_mip_stats) spec.get_mip_stats(summary.mip_ok, summary.mip_fallback);
+            if (spec.get_mip_solved_count) summary.mip_solved = spec.get_mip_solved_count();
             report(summary);
         }
     });

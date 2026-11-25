@@ -185,6 +185,23 @@ void regressions()
     require(high.R.size() == 1 && high.C.size() == 1, "p_op not used for remove moves");
     require(greedyMethod({}, 0, 0, 0, 0.02).R.empty(), "empty input");
     require(proposedMethod({}, 0, 0, 0, 0.02).C.empty(), "empty proposed input");
+    require(baselineMethod({}, 1, 0, 0, 0.02).R.empty(), "empty baseline input");
+    require(simpleGreedyMethod({}, 1, 0, 0, 0.02).R.empty(), "empty simple greedy input");
+    require(mipMethodScip({}, 1, 0, 0, 0.02).R.empty(), "empty SCIP input");
+    require(mipMethodGlpk({}, 1, 0, 0, 0.02).R.empty(), "empty GLPK input");
+    Grid ragged{{1, 0}, {1}};
+    for (const auto &spec : algorithms()) {
+        bool rejected = false;
+        try { spec.plan(ragged, 1, 1, 1, 0.02); }
+        catch (const std::invalid_argument &) { rejected = true; }
+        require(rejected, std::string("ragged grid accepted by ") + spec.name);
+    }
+    {
+        bool rejected = false;
+        try { baselineMethod(diagonal, 0, 1, 1, 0.02); }
+        catch (const std::invalid_argument &) { rejected = true; }
+        require(rejected, "invalid baseline operation index accepted");
+    }
 
     // Check local optimality across sizes and densities using the experiment's non-binary probabilities.
     std::mt19937 gen(384723);

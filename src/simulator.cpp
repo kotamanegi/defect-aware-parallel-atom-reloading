@@ -1,8 +1,8 @@
-#include "../include/simulator.h"
-#include "../include/grid.h"
-#include "../include/algorithms.h"
-#include "../include/noise.h"
-#include "../include/timing.h"
+#include "simulator.h"
+#include "grid.h"
+#include "algorithms.h"
+#include "noise.h"
+#include "timing.h"
 #include <stdexcept>
 
 // Discarded-atom statistics, accumulated across trials.
